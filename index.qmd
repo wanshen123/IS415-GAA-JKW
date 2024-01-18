@@ -1,5 +1,8 @@
 ---
 title: "IS415-GAA-JKW"
+date: 01/18/2024
+date-format: "DD/MM/YYYY"
+editor: visual
 ---
 
 This is a Quarto website.
