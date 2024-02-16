@@ -5,10 +5,16 @@ date-format: "DD/MM/YYYY"
 editor: visual
 ---
 
-This is a Quarto website.
+# Project Proposal
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+## 1.0 Introduction
 
-```{r}
-1 + 1
-```
+As urbanization accelerates globally, effective waste management becomes paramount to maintain environmental sustainability and public health. Singapore, a densely populated city-state, faces significant waste management challenges. While initiatives like recycling have been implemented, optimizing the distribution of recycling bins remains crucial for maximizing participation and minimizing waste diversion. Geospatial analytics offer a powerful tool set to analyze spatial data, optimize resource allocation, and enhance waste management strategies.
+
+## 2.0 Objective
+
+This project aims to leverage geospatial analytics to optimize the distribution of recycling bins in Singapore. By analyzing the spatial distribution of recycling bins and demographic data, we aim to identify areas with low recycling bin density and propose optimal locations for new recycling bins. We will also explore the potential impact of new recycling bin locations on waste diversion and recycling participation.
+
+## 3.0 Data
+
+The project will utilize the following datasets:
