@@ -1,5 +1,5 @@
 ---
-title: "IS415-GAA-JinYuan&WanShen"
+title: "IS415-GAA JinYuan & WanShen"
 date: 02/23/2024
 date-format: "DD/MM/YYYY"
 editor: visual

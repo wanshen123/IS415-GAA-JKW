@@ -1,5 +1,5 @@
 ---
-title: "IS415-GAA-JinYuan&WanShen: Geospatial Analysis of Recycling Bin Distribution in Singapore - A Comprehensive Assessment of Normal Recycling, Incentives Bins, and E-Waste Bins"
+title: "IS415-GAA Group 6: Project Proposal - Geospatial Analysis of Recycling Bin Distribution in Singapore"
 date: 02/23/2024
 date-format: "DD/MM/YYYY"
 editor: visual
