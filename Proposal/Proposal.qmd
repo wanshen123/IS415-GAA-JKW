@@ -20,23 +20,23 @@ Under [Singapore’s Zero Waste Masterplan](https://www.towardszerowaste.gov.sg/
 This project aims to leverage geospatial analytics to optimize the distribution of recycling bins in Singapore, including normal blue recycle bins, incentive bins, and e-waste bins. By analyzing waste generation data, population density, and existing bin locations, we will identify spatial patterns, gaps in coverage, and opportunities for improvement. We will then recommend specific actions, such as relocating bins, increasing the density of certain bin types in high-waste areas, and implementing targeted educational campaigns. This project has the potential to significantly increase recycling rates, reduce waste collection costs, and promote sustainable waste management practices in Singapore.
 
 ## 3.0 Relevant Related Works
-- [Types of Recycle Bins](https://recyclopedia.sg/resources?section=All): This website is a wiki that provides information on the different types of recycling bins and recycling initiatives in Singapore.
-- Sustainability Initiatives in Singapore
-  - [Singapore's Zero Waste Master Plan](https://www.towardszerowaste.gov.sg/zero-waste-masterplan/): This website is about Singapore's plan to achieve a sustainable, resource-efficient, and climate-resilient future through its Zero Waste Masterplan by 2030.
-  - [Singapore Green Plan 2030](https://www.greenplan.gov.sg/): This website highlights Singapore's national sustainability plan, which aims to strengthen the country's commitments under the UN's 2030 Sustainable Development Agenda and Paris Agreement. It also aims to position Singapore to achieve its long-term aspiration of attaining net-zero emissions by 2050.
-- [Paper Recycle Bins Interactive Map](https://www.sgrecycle.com/locations/): This map offers information on the locations of SG Recycle bins designated for paper recycling.
+
+-   [Types of Recycle Bins](https://recyclopedia.sg/resources?section=All): This website is a wiki that provides information on the different types of recycling bins and recycling initiatives in Singapore.
+-   Sustainability Initiatives in Singapore
+    -   [Singapore's Zero Waste Master Plan](https://www.towardszerowaste.gov.sg/zero-waste-masterplan/): This website is about Singapore's plan to achieve a sustainable, resource-efficient, and climate-resilient future through its Zero Waste Masterplan by 2030.
+    -   [Singapore Green Plan 2030](https://www.greenplan.gov.sg/): This website highlights Singapore's national sustainability plan, which aims to strengthen the country's commitments under the UN's 2030 Sustainable Development Agenda and Paris Agreement. It also aims to position Singapore to achieve its long-term aspiration of attaining net-zero emissions by 2050.
+-   [Paper Recycle Bins Interactive Map](https://www.sgrecycle.com/locations/): This map offers information on the locations of SG Recycle bins designated for paper recycling.
 
 ### 3.0.1 Learning from the Works of Others
 
 Based on the myriad recycling maps and scattered information available online, there lacks a centralized hub presenting comprehensive recycling details, including various categories like regular recyclables, e-waste, paper, clothes, and more. In response to Singapore's recycling initiative urging us to leverage geospatial analysis, we aim to streamline this data aggregation process, extracting valuable insights to formulate effective strategies towards achieving Singapore's zero emissions goals.
-
 
 ## 4.0 Data
 
 The project will utilize the following data sets:
 
 -   [data.gov.sg](https://beta.data.gov.sg/collections/1450/view): Location of Blue Bins in Singapore
--   [nea.gov.sg](https://www.nea.gov.sg/our-services/waste-management/reverse-vending-machines): Location of Reverse Vending Machines(RVM) [RecycleNSave] in Singapore
+-   [nea.gov.sg](https://www.nea.gov.sg/our-services/waste-management/reverse-vending-machines): Location of Reverse Vending Machines(RVM) \[RecycleNSave\] in Singapore
 -   [ALBA E-Waste Singapore](https://alba-ewaste.sg/drop-off-locations/): Location of E-Waste Bin in Singapore
 -   [Singstat](https://www.singstat.gov.sg/find-data/search-by-theme/population/geographic-distribution/latest-data): Population Density of Singapore
 
@@ -44,46 +44,43 @@ The project will utilize the following data sets:
 
 ### 5.0.1 Data Collection:
 
-- Gather geospatial data on the locations of normal blue recycle bins, incentive bins, and e-waste bins from relevant government agencies or open data sources.
-- Acquire population density data for Singapore, preferably at a fine spatial resolution.
-- Clean and preprocess the collected data to ensure accuracy and consistency.
+-   Gather geospatial data on the locations of normal blue recycle bins, incentive bins, and e-waste bins from relevant government agencies or open data sources.
+-   Acquire population density data for Singapore, preferably at a fine spatial resolution.
+-   Clean and preprocess the collected data to ensure accuracy and consistency.
 
 ### 5.0.2 Data Preparation:
 
-Standardize and geocode the location data of recycling bins and population density data for spatial analysis.
-Ensure compatibility of data formats and projections for seamless integration into GIS software.
+Standardize and geocode the location data of recycling bins and population density data for spatial analysis. Ensure compatibility of data formats and projections for seamless integration into GIS software.
 
 ### 5.0.3 Spatial Analysis:
 
 #### Kernel Density Estimation (KDE) Analysis:
 
-- Apply Kernel Density Estimation (KDE) to analyze the spatial distribution of recycling bins and population density.
-- Generate KDE surfaces for normal blue recycle bins, incentive bins, e-waste bins, and population density to identify areas of high and low intensity.
+-   Apply Kernel Density Estimation (KDE) to analyze the spatial distribution of recycling bins and population density.
+-   Generate KDE surfaces for normal blue recycle bins, incentive bins, e-waste bins, and population density to identify areas of high and low intensity.
 
 #### Global and Local Measures of Spatial Autocorrelation:
 
-- Calculate global measures of spatial autocorrelation, such as Moran's I or Geary's C, to assess the overall spatial clustering of recycling bins and population density across Singapore.
-- Conduct Local Indicators of Spatial Association (LISA) analysis to identify specific hotspots (high-high clusters) and cold spots (low-low clusters) of recycling bins and population density.
+-   Calculate global measures of spatial autocorrelation, such as Moran's I or Geary's C, to assess the overall spatial clustering of recycling bins and population density across Singapore.
+-   Conduct Local Indicators of Spatial Association (LISA) analysis to identify specific hotspots (high-high clusters) and cold spots (low-low clusters) of recycling bins and population density.
 
 ### 5.0.4 Identification of Hotspots and Cold Spots:
 
-- Analyze KDE surfaces and spatial autocorrelation measures to identify hotspots and cold spots of recycling bins and population density.
-- Hotspots represent areas with high concentrations of recycling bins or population density, while cold spots indicate areas with low concentrations.
+-   Analyze KDE surfaces and spatial autocorrelation measures to identify hotspots and cold spots of recycling bins and population density.
+-   Hotspots represent areas with high concentrations of recycling bins or population density, while cold spots indicate areas with low concentrations.
 
-### 5.0.5  Integration and Interpretation:
+### 5.0.5 Integration and Interpretation:
 
-- Integrate findings from KDE analysis and spatial autocorrelation measures to identify priority areas for intervention.
-- Interpret results in conjunction with demographic data to understand the underlying factors influencing the spatial distribution of recycling bins and population density.
+-   Integrate findings from KDE analysis and spatial autocorrelation measures to identify priority areas for intervention.
+-   Interpret results in conjunction with demographic data to understand the underlying factors influencing the spatial distribution of recycling bins and population density.
 
-### 5.0.6  Recommendations:
+### 5.0.6 Recommendations:
 
-- Based on the analysis, develop recommendations for optimizing the distribution of recycling bins in Singapore.
-- Prioritize the allocation of resources and infrastructure development efforts in identified hotspots to enhance waste management efficiency and promote recycling behavior.
+-   Based on the analysis, develop recommendations for optimizing the distribution of recycling bins in Singapore.
+-   Prioritize the allocation of resources and infrastructure development efforts in identified hotspots to enhance waste management efficiency and promote recycling behavior.
 
 ## 6.0 Time Line
 
+![](is415_2024-02-25_09.26am.png){width="9000"}
+
 ## 7.0 Story Boarding
-
-
-
-
