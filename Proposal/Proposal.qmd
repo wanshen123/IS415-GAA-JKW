@@ -5,7 +5,7 @@ date-format: "DD/MM/YYYY"
 editor: visual
 ---
 
-# Enhancing Waste Management Through Geospatial Analytics
+# RecycleSG - Optimizing Recycling Bin Distribution in Singapore
 
 ## 1.0 Problem & Motivation
 
