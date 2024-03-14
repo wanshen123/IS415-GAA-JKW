@@ -17,7 +17,7 @@ Under [Singapore’s Zero Waste Masterplan](https://www.towardszerowaste.gov.sg/
 
 ## 2.0 Objective
 
-This project aims to leverage geospatial analytics to optimize the distribution of recycling bins in Singapore, including normal blue recycle bins, incentive bins, and e-waste bins. By analyzing waste generation data, population density, and existing bin locations, we will identify spatial patterns, gaps in coverage, and opportunities for improvement. We will then recommend specific actions, such as relocating bins, increasing the density of certain bin types in high-waste areas, and implementing targeted educational campaigns. This project has the potential to significantly increase recycling rates, reduce waste collection costs, and promote sustainable waste management practices in Singapore.
+Our project aims to develop a comprehensive application that leverages geospatial analytics to optimize the distribution of recycling bins across Singapore. By analyzing data on population density and existing bin locations, the application will identify spatial patterns, gaps in coverage, and opportunities for improvement in the placement of normal blue recycling bins, incentive bins, and e-waste bins. The application will then provide insights based on the analysis and allow users to interactively explore the data and results. 
 
 ## 3.0 Relevant Related Works
 
