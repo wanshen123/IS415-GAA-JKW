@@ -61,5 +61,12 @@
     "title": "IS415-GAA JinYuan & WanShen",
     "section": "",
     "text": "Our project focuses on leveraging geospatial analytics to optimize recycling bin placement and management in Singapore urban areas. By analysing spatial data, we aim to identify optimal locations for recycling bins, improve waste management efficiency, and promote sustainability. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University."
+  },
+  {
+    "objectID": "Work/Test.html",
+    "href": "Work/Test.html",
+    "title": "My Shiny App",
+    "section": "",
+    "text": "# Load the shiny package\nlibrary(shiny)\n\nWarning: package 'shiny' was built under R version 4.3.3\n\n# Define the UI\nui &lt;- fluidPage(\n  titlePanel(\"My Shiny App\"),\n  sidebarLayout(\n    sidebarPanel(\n      sliderInput(\"num\", \"Choose a number\", 1, 100, 30)\n    ),\n    mainPanel(\n      plotOutput(\"histogram\")\n    )\n  )\n)\n\n# Define the server logic\nserver &lt;- function(input, output) {\n  output$histogram &lt;- renderPlot({\n    hist(rnorm(input$num), main = \"Histogram\")\n  })\n}\n\n# Run the app\nshinyApp(ui, server)\n\n\n\n\n\nlibrary(shiny)\nlibrary(leaflet)\n\n# Define UI\nui &lt;- fluidPage(\n  titlePanel(\"Singapore Map\"),\n  leafletOutput(\"map\")\n)\n\n# Define server logic\nserver &lt;- function(input, output) {\n  output$map &lt;- renderLeaflet({\n    leaflet() %&gt;%\n      addTiles() %&gt;%\n      setView(lng = 103.8198, lat = 1.3521, zoom = 12)\n  })\n}\n\n# Run the app\nshinyApp(ui = ui, server = server)"
   }
 ]
