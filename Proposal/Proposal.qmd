@@ -17,7 +17,7 @@ Under [Singapore’s Zero Waste Masterplan](https://www.towardszerowaste.gov.sg/
 
 ## 2.0 Objective
 
-Our project aims to develop a comprehensive application that leverages geospatial analytics to optimize the distribution of recycling bins across Singapore. By analyzing data on population density and existing bin locations, the application will identify spatial patterns, gaps in coverage, and opportunities for improvement in the placement of normal blue recycling bins, incentive bins, and e-waste bins. The application will then provide insights based on the analysis and allow users to interactively explore the data and results. 
+Our project aims to develop a comprehensive application that leverages geospatial analytics to optimize the distribution of recycling bins across Singapore. By analyzing data on population density and existing bin locations, the application will identify spatial patterns, gaps in coverage, and opportunities for improvement in the placement of normal blue recycling bins, incentive bins, and e-waste bins. The application will then provide insights based on the analysis and allow users to interactively explore the data and results.
 
 ## 3.0 Relevant Related Works
 
@@ -26,6 +26,8 @@ Our project aims to develop a comprehensive application that leverages geospatia
     -   [Singapore's Zero Waste Master Plan](https://www.towardszerowaste.gov.sg/zero-waste-masterplan/): This website is about Singapore's plan to achieve a sustainable, resource-efficient, and climate-resilient future through its Zero Waste Masterplan by 2030.
     -   [Singapore Green Plan 2030](https://www.greenplan.gov.sg/): This website highlights Singapore's national sustainability plan, which aims to strengthen the country's commitments under the UN's 2030 Sustainable Development Agenda and Paris Agreement. It also aims to position Singapore to achieve its long-term aspiration of attaining net-zero emissions by 2050.
 -   [Paper Recycle Bins Interactive Map](https://www.sgrecycle.com/locations/): This map offers information on the locations of SG Recycle bins designated for paper recycling.
+
+Our project will draw from existing geospatial analysis techniques and open datasets to inform our approach. We will focus on practical exercises to refine our proposal and ensure realistic analytical methods.
 
 ### 3.0.1 Learning from the Works of Others
 
@@ -42,45 +44,32 @@ The project will utilize the following data sets:
 
 ## 5.0 Approach
 
-### 5.0.1 Data Collection:
+### 5.0.1 Spatial Analysis Module:
 
--   Gather geospatial data on the locations of normal blue recycle bins, incentive bins, and e-waste bins from relevant government agencies or open data sources.
--   Acquire population density data for Singapore, preferably at a fine spatial resolution.
--   Clean and preprocess the collected data to ensure accuracy and consistency.
+The Spatial Analysis Module will employ Kernel Density Estimation (KDE) to analyze the spatial distribution of recycling bins and population density across Singapore. KDE is a commonly used technique in spatial analysis to estimate the density of point events over a continuous surface. By applying KDE to the location data of recycling bins and population density, we will generate density surfaces that visualize the intensity of these features across the city-state.
 
-### 5.0.2 Data Preparation:
+This module will involve the following steps:
 
-Standardize and geocode the location data of recycling bins and population density data for spatial analysis. Ensure compatibility of data formats and projections for seamless integration into GIS software.
+-   Data Preparation: Cleaning and preprocessing of the location data of recycling bins and population density to ensure consistency and accuracy.
+-   KDE Analysis: Applying KDE algorithms to the prepared data sets to generate density surfaces for recycling bins and population density.
+-   Visualization: Visualizing the KDE surfaces using interactive maps to allow users to explore the spatial distribution patterns.
 
-### 5.0.3 Spatial Analysis:
+### 5.0.2 Hotspot Identification Module:
 
-#### Kernel Density Estimation (KDE) Analysis:
+The Hotspot Identification Module will utilize global and local measures of spatial autocorrelation to identify hotspots and cold spots of recycling bins and population density. Global measures, such as Moran's I or Geary's C, will provide an overall assessment of spatial clustering, while local measures, such as Local Indicators of Spatial Association (LISA), will identify specific hotspots and cold spots within the city-state.
 
--   Apply Kernel Density Estimation (KDE) to analyze the spatial distribution of recycling bins and population density.
--   Generate KDE surfaces for normal blue recycle bins, incentive bins, e-waste bins, and population density to identify areas of high and low intensity.
+This module will involve the following steps:
 
-#### Global and Local Measures of Spatial Autocorrelation:
+-   Calculation of Global Measures: Computing global measures of spatial autocorrelation to assess the overall clustering patterns of recycling bins and population density.
+-   Local Indicators Analysis: Conducting LISA analysis to identify statistically significant clusters of high and low values (hotspots and cold spots) of recycling bins and population density.
+-   Interpretation: Interpreting the results of the hotspot analysis in conjunction with demographic and environmental data to understand the underlying factors influencing the spatial distribution patterns.
 
--   Calculate global measures of spatial autocorrelation, such as Moran's I or Geary's C, to assess the overall spatial clustering of recycling bins and population density across Singapore.
--   Conduct Local Indicators of Spatial Association (LISA) analysis to identify specific hotspots (high-high clusters) and cold spots (low-low clusters) of recycling bins and population density.
+## 6.0 R Shiny Application
 
-### 5.0.4 Identification of Hotspots and Cold Spots:
+The shiny application will integrate the outputs from the Spatial Analysis Module and Hotspot Identification Module to provide users with interactive visualizations and actionable insights. Users will be able to explore the KDE surfaces, identify hotspots and cold spots, and access recommendations for optimizing recycling bin distribution in Singapore. The application will feature intuitive user interfaces and interactive maps to facilitate data exploration and decision-making by stakeholders and policymakers.
 
--   Analyze KDE surfaces and spatial autocorrelation measures to identify hotspots and cold spots of recycling bins and population density.
--   Hotspots represent areas with high concentrations of recycling bins or population density, while cold spots indicate areas with low concentrations.
-
-### 5.0.5 Integration and Interpretation:
-
--   Integrate findings from KDE analysis and spatial autocorrelation measures to identify priority areas for intervention.
--   Interpret results in conjunction with demographic data to understand the underlying factors influencing the spatial distribution of recycling bins and population density.
-
-### 5.0.6 Recommendations:
-
--   Based on the analysis, develop recommendations for optimizing the distribution of recycling bins in Singapore.
--   Prioritize the allocation of resources and infrastructure development efforts in identified hotspots to enhance waste management efficiency and promote recycling behavior.
-
-## 6.0 Time Line
+## 7.0 Time Line
 
 ![](is415_2024-02-25_09.26am.png){width="9000"}
 
-## 7.0 Story Boarding
+## 8.0 Story Boarding
