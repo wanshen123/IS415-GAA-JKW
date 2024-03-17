@@ -5,7 +5,7 @@ date-format: "DD/MM/YYYY"
 editor: visual
 ---
 
-# Welcome to our Geospatial Analytics Project Homepage!
+# Welcome to RecycleSG Homepage!
 
 ## About Us
 
