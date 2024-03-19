@@ -7,6 +7,7 @@ library(leaflet)
 mpsz <- st_read(dsn = "testdata", layer = "MP14_SUBZONE_WEB_PL")
 popagsex <- read_csv("testdata/respopagesextod2011to2020.csv")
 childcare <- st_read("testdata/PreSchoolsLocation.geojson") %>% st_transform(crs = 3414)
+binlocation <- read_rds("../Data/alba/ewbins.rds")
 
 popagsex2018_male <- popagsex %>%
   filter(Sex == "Males") %>%
@@ -61,7 +62,7 @@ ui <- fluidPage(
         tabPanel("Age Distribution",
                  tmapOutput("mapPlot1"),
                  DT::dataTableOutput("aTable1")),
-        tabPanel("Childcare Facilities",
+        tabPanel("Bin Locations",
                  tmapOutput("mapPlot2"),
                  DT::dataTableOutput("aTable2"))
       )
@@ -88,12 +89,12 @@ server <- function(input, output) {
   output$mapPlot2 <- renderTmap({
     tm_shape(mpsz) +
       tm_polygons() +
-      tm_shape(childcare) +
+      tm_shape(binlocation$geometry) +
       tm_dots()
   })
   
   output$aTable2 <- DT::renderDataTable({
-    childcare
+    binlocation
   })
 }
 
