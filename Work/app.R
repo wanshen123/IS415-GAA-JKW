@@ -55,7 +55,11 @@ ui <- fluidPage(
                                  "Yellow-Orange-Brown" = "YlOrBr",
                                  "Yellow-Green" = "YlGn",
                                  "Orange-Red" = "OrRd"),
-                  selected = "YlOrRd")
+                  selected = "YlOrRd"),
+      selectInput(inputId = "typeofbin",
+                  label = "Type of Bin:",
+                  choices = unique(binlocation$Type.of.Bin.Placed),
+                  multiple = TRUE)
     ),
     mainPanel(
       tabsetPanel(
@@ -87,14 +91,28 @@ server <- function(input, output) {
   })
   
   output$mapPlot2 <- renderTmap({
-    tm_shape(mpsz) +
-      tm_polygons() +
-      tm_shape(binlocation$geometry) +
-      tm_dots()
+    # Check if any value is selected in the input field
+    if (length(input$typeofbin) == 0) {
+      return(NULL)  # Return NULL if no value is selected
+    } else {
+      tm_shape(mpsz) +
+        tm_polygons() +
+        tm_shape(binlocation[binlocation$Type.of.Bin.Placed %in% input$typeofbin, ]) +
+        tm_dots(col = "Type.of.Bin.Placed",
+                palette = "Set1",
+                style = "cat") +
+        tm_layout(legend.outside = TRUE) +
+        tm_legend(legend.show = TRUE)
+    }
   })
   
   output$aTable2 <- DT::renderDataTable({
-    binlocation
+    # Check if any value is selected in the input field
+    if (length(input$typeofbin) == 0) {
+      return(NULL)  # Return NULL if no value is selected
+    } else {
+      binlocation[binlocation$Type.of.Bin.Placed %in% input$typeofbin, ]
+    }
   })
 }
 
