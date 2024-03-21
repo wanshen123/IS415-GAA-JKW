@@ -75,5 +75,19 @@
     "title": "IS415-GAA Group 6: Project Proposal - Geospatial Analysis of Recycling Bin Distribution in Singapore",
     "section": "",
     "text": "The shiny application will integrate the outputs from the Spatial Analysis Module and Hotspot Identification Module to provide users with interactive visualizations and actionable insights. Users will be able to explore the KDE surfaces, identify hotspots and cold spots, and access recommendations for optimizing recycling bin distribution in Singapore. The application will feature intuitive user interfaces and interactive maps to facilitate data exploration and decision-making by stakeholders and policymakers."
+  },
+  {
+    "objectID": "Work/KDE_Analysis.html",
+    "href": "Work/KDE_Analysis.html",
+    "title": "KDE Analysis",
+    "section": "",
+    "text": "pacman::p_load(sf, tidyverse, tmap, maptools, raster, spatstat, spNetwork, classInt, viridis, arrow)\n\n\nbinlocation &lt;- read_rds(\"../Data/alba/ewbins.rds\")\nmpsz &lt;- st_read(dsn = \"testdata\", layer = \"MP14_SUBZONE_WEB_PL\")\n\nReading layer `MP14_SUBZONE_WEB_PL' from data source \n  `C:\\wanshen123\\IS415-GAA-JKW\\Work\\testdata' using driver `ESRI Shapefile'\nSimple feature collection with 323 features and 15 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 2667.538 ymin: 15748.72 xmax: 56396.44 ymax: 50256.33\nProjected CRS: SVY21\n\n\n\ntmap_mode(\"plot\")\n\ntmap mode set to plotting\n\ntm_shape(binlocation) +\n  tm_dots()\n\n\n\n\n\ntm_shape(mpsz) +\n  tm_polygons() +\ntm_shape(binlocation) +\n  tm_dots()\n\n\n\n\n\nbin_sf &lt;- as_Spatial(binlocation)\nbin_sp &lt;- as(bin_sf, \"SpatialPoints\")\nbin_ppp &lt;- as(bin_sp, \"ppp\")\nplot(bin_ppp)\n\n\n\n\n\nisland &lt;- as_Spatial(mpsz)\nisland_sp &lt;- as(island, \"SpatialPolygons\")\nsg_owin &lt;- as(island_sp, \"owin\")\nplot(sg_owin)\n\n\n\n\n\nislandSG_ppp_bin = bin_ppp[sg_owin]\n\n\nkde_bin_bw &lt;- density(bin_ppp,\n                              sigma=bw.diggle,\n                              edge=TRUE,\n                            kernel=\"gaussian\") \n\n\nplot(kde_bin_bw)\n\n\n\n\n\nbw1 &lt;- bw.diggle(bin_ppp)\nbw1\n\n   sigma \n110.9464"
+  },
+  {
+    "objectID": "Work/Postal_to_LatLon.html",
+    "href": "Work/Postal_to_LatLon.html",
+    "title": "Get LatLon from Postal Code",
+    "section": "",
+    "text": "# Define Singaporean postal codes with \"SG\" suffix\nsingapore_postal_codes &lt;- c(\"038989\", \"238877\", \"188065\")\n\n# Function to geocode using OpenStreetMap Nominatim API\ngeocode_osm &lt;- function(postal_codes) {\n  result &lt;- lapply(postal_codes, function(code) {\n    url &lt;- paste0(\"https://nominatim.openstreetmap.org/search?format=json&postalcode=\", code)\n    data &lt;- jsonlite::fromJSON(url)\n    if (length(data) &gt; 0) {\n      return(data[1, c(\"lat\", \"lon\")])\n    } else {\n      return(NA)\n    }\n  })\n  result &lt;- do.call(rbind, result)\n  return(result)\n}\n\n# Geocode postal codes using OpenStreetMap Nominatim API\ngeo_data_osm &lt;- geocode_osm(singapore_postal_codes)\n\n# Print the geocoded data\nprint(geo_data_osm)\n\n                lat          lon\n1         1.2956625  103.8590111\n2 1.303783707142857 103.83313605\n3         1.2961679  103.8500436"
   }
 ]

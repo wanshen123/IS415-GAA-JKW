@@ -1,0 +1,60 @@
+---
+title: "KDE Analysis"
+---
+
+```{r}
+pacman::p_load(sf, tidyverse, tmap, maptools, raster, spatstat, spNetwork, classInt, viridis, arrow)
+```
+
+```{r}
+binlocation <- read_rds("../Data/alba/ewbins.rds")
+mpsz <- st_read(dsn = "testdata", layer = "MP14_SUBZONE_WEB_PL")
+```
+
+```{r}
+tmap_mode("plot")
+tm_shape(binlocation) +
+  tm_dots()
+```
+
+```{r}
+tm_shape(mpsz) +
+  tm_polygons() +
+tm_shape(binlocation) +
+  tm_dots()
+```
+
+```{r}
+bin_sf <- as_Spatial(binlocation)
+bin_sp <- as(bin_sf, "SpatialPoints")
+bin_ppp <- as(bin_sp, "ppp")
+plot(bin_ppp)
+```
+
+```{r}
+island <- as_Spatial(mpsz)
+island_sp <- as(island, "SpatialPolygons")
+sg_owin <- as(island_sp, "owin")
+plot(sg_owin)
+```
+
+```{r}
+islandSG_ppp_bin = bin_ppp[sg_owin]
+```
+
+```{r}
+kde_bin_bw <- density(bin_ppp,
+                              sigma=bw.diggle,
+                              edge=TRUE,
+                            kernel="gaussian") 
+```
+
+```{r}
+plot(kde_bin_bw)
+```
+
+```{r}
+bw1 <- bw.diggle(bin_ppp)
+bw1
+```
+
