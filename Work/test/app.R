@@ -193,7 +193,20 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                   ),
                   # 3rd Tab
                   tabPanel("Hotspot Analysis",
-                           
+                           sidebarLayout(
+                             mainPanel(
+                               tmapOutput("hotspotPlot", width = "100%", height = "700"),
+                             ),
+                             sidebarPanel(
+                               shinyjs::useShinyjs(),
+                               h4("Bin Location Points"),
+                               h5("Select the type of bin to be displayed on the map"),
+                               selectInput(inputId = "bin_type",
+                                           label = "Select Bin Type",
+                                           choices = unique(binlocation$`Type of Bin Placed`)),
+                             ),
+                             
+                           ),
                   ),
                 )
 )
