@@ -12,10 +12,11 @@ library(spatstat)
 library(maptools)
 library(raster)
 
-mpsz <- st_read(dsn = "../testdata", layer = "MP14_SUBZONE_WEB_PL")
+mpsz <- st_read(dsn = "../testdata", layer = "MPSZ-2019")
 popagsex <- read_csv("../testdata/respopagesextod2011to2020.csv")
 childcare <- st_read("../testdata/PreSchoolsLocation.geojson") %>% st_transform(crs = 3414)
 binlocation <- read_rds("../../Data/alba/ewbins.rds")
+roads_in_singapore <- read_rds("../testdata/sgRoad.rds")
 
 
 # Define UI for application
@@ -81,7 +82,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                            )
                   ),
                   # 2nd Tab
-                  tabPanel("Network Constrained Point Pattern Analysis",
+                  tabPanel("KDE Analysis",
                            titlePanel("Network Constrained Point Pattern Analysis"),
                            hr(),
                            tabsetPanel(type = "tabs",
@@ -97,128 +98,101 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                                          h2(),
                                                          imageOutput("introductionKernel")),
                                                 ),
-                                                
-                                                
-                                                
-                                       ),             
-                                       tabPanel("Network Kernel Density Estimation", 
+                                       ),  
+                                       tabPanel("Bin Location Points",
                                                 sidebarLayout(
                                                   mainPanel(
                                                     tmapOutput("mapPlot", width = "100%", height = "700"),
+                                                  ),
+                                                  sidebarPanel(
+                                                    shinyjs::useShinyjs(),
+                                                    h4("Bin Location Points"),
+                                                    h5("Select the type of bin to be displayed on the map"),
+                                                    selectInput(inputId = "bin_type",
+                                                                label = "Select Bin Type",
+                                                                choices = unique(binlocation$`Type of Bin Placed`)),
+                                                  ),
+                                                  
+                                                ),
+                                                
+                                       ),
+                                       tabPanel("Kernel Density Estimation", 
+                                                sidebarLayout(
+                                                  mainPanel(
+                                                    tmapOutput("kdePlot", width = "100%", height = "700"),
                                                     br(),
                                                     verbatimTextOutput("netKDESettings"),
                                                   ),
                                                   sidebarPanel(
                                                     shinyjs::useShinyjs(),
-                                                    h4("Network Kernel Density Estimation Variable Inputs"),
-                                                    h5("Network and Spatial Points"),
-                                                    selectInput(inputId = "bin_type",
-                                                                label = "Select Bin Type",
-                                                                choices = unique(binlocation$`Type of Bin Placed`)
-                                                    ),
-                                                    selectInput(inputId = "network_type",
-                                                                label = "Types of Network",
-                                                                choices = list("Road Network" = "net_road",
-                                                                               "Pedestrian Network" = "net_ped",
-                                                                               "Tram Network" = "net_tram")),
-                                                    selectInput(inputId = "locs",
-                                                                label = "Location of Interest",
-                                                                choices = list(
-                                                                  "Business Establishments" = "sf_business",
-                                                                  "Childcare Centres" = "sf_childcare",
-                                                                  "Drinking Fountain" = "sf_drinking_fountain",
-                                                                  "Landmarks" = "sf_landmarks",
-                                                                  "Public Toilets" = "sf_pub_toilets")),
-                                                    selectInput(inputId = "netsublocs",
-                                                                label = "Specific Themes/Sub-Categories",
-                                                                choices = list()),
-                                                    h5("Lixels"),
-                                                    sliderInput(inputId = "lx_length", "Length of Lixel",
-                                                                min = 100, max = 1500, value = 700, step = 50),
-                                                    sliderInput(inputId = "lx_length_min", "Min. Lixel Length",
-                                                                min = 100, max = 1500, value = 350, step = 50),
+                                                    h4("Kernel Density Estimation"),
                                                     h5("Kernel Density Estimation Methods"),
                                                     selectInput(inputId = "kernel_name",
                                                                 label = "Choose the kernel to be used:",
                                                                 choices = list("Quartic" = "quartic",
-                                                                               "Triangle" = "triangle",
-                                                                               "Tricube" = "tricube",
-                                                                               "Cosine" = "cosine",
-                                                                               "Triweight" = "triweight",
+                                                                               "Dis" = "dis",
                                                                                "Epanechnikov" = "epanechnikov",
                                                                                "Uniform" = "uniform")),
-                                                    selectInput(inputId = "method_name",
-                                                                label = "Select the Method to be used",
-                                                                choices = list("Simple" = "simple",
-                                                                               "Discontinuous" = "discontinuous",
-                                                                               "Continuous" = "Continuous")),
-                                                    
-                                                    actionButton("netKDEGenerate", "Generate KDE Map"),
-                                                    
-                                                    h5("Please note: The map will take a few minutes to generate after clicking the button."),
-                                                    
                                                   ),
                                                   
                                                 ),
                                                 uiOutput("netKDEExpaliner"),
                                                 br(),
                                        ),
-                                       tabPanel("Statistical Functions", 
+                                       tabPanel("Network Constrained KDE (NetKDE) Analysis", 
                                                 sidebarLayout(
                                                   mainPanel(
-                                                    plotlyOutput("kfun"),
-                                                    plotlyOutput("gfun"),
+                                                    tmapOutput("roadBinPlot", width = "100%", height = "700")
                                                   ),
                                                   sidebarPanel(
                                                     shinyjs::useShinyjs(),
-                                                    h4("Statistical Function Variable Inputs"),
-                                                    h5("Network and Spatial Points"),
-                                                    selectInput(inputId = "bin_type",
-                                                                label = "Select Bin Type",
-                                                                choices = unique(binlocation$`Type of Bin Placed`)
-                                                                ),
-                                                    selectInput(inputId = "netstatnetwork_type",
-                                                                label = "Types of Network",
-                                                                choices = list("Road Network" = "net_road",
-                                                                               "Pedestrian Network" = "net_ped",
-                                                                               "Tram Network" = "net_tram")),
-                                                    selectInput(inputId = "netstatlocs",
-                                                                label = "Location of Interest",
-                                                                choices = list(
-                                                                  "Business Establishments" = "sf_business",
-                                                                  "Childcare Centres" = "sf_childcare",
-                                                                  "Drinking Fountain" = "sf_drinking_fountain",
-                                                                  "Landmarks" = "sf_landmarks",
-                                                                  "Public Toilets" = "sf_pub_toilets")),
-                                                    selectInput(inputId = "netstatsublocs",
-                                                                label = "Specific Themes/Sub-Categories",
-                                                                choices = list()),
-                                                    h5("Other Variables"),
-                                                    sliderInput(inputId = "netstatnet_start", "Start",
-                                                                min = 0, max = 2000, value = 100, step = 50),
-                                                    sliderInput(inputId = "netstatnet_end", "End",
-                                                                min = 100, max = 5000, value = 500, step = 50),
-                                                    sliderInput(inputId = "netstatn_sims", "Number of Simulations",
-                                                                min = 10, max = 300, value = 50, step = 5),
-                                                    sliderInput(inputId = "netstatagg", "Aggregate Value",
-                                                                min = 0, max = 1000, value = 0, step = 50),
-                                                    
-                                                    actionButton("netKDEGenerateStats", "Generate Statistical Results"),
-                                                    
-                                                    h5("Please note: The graphs will take a few minutes to generate."),
-                                                    
-                                                  ),
+                                                    h4("Network Constrained KDE Analysis"),
+                                                    h5("Select the area to perform the analysis"),
+                                                    selectInput(inputId = "area",
+                                                                label = "Select Area",
+                                                                choices = list("SINGAPORE RIVER",
+                                                                               "MUSEUM",
+                                                                               "MARINE PARADE",
+                                                                               "DOWNTOWN CORE",
+                                                                               "QUEENSTOWN",
+                                                                               "OUTRAM",
+                                                                               "KALLANG",
+                                                                               "TANGLIN",
+                                                                               "NEWTON",
+                                                                               "CLEMENTI",
+                                                                               "ORCHARD",
+                                                                               "GEYLANG",
+                                                                               "NOVENA",
+                                                                               "BUKIT TIMAH",
+                                                                               "TOA PAYOH",
+                                                                               "JURONG WEST",
+                                                                               "SERANGOON",
+                                                                               "BISHAN",
+                                                                               "TAMPINES",
+                                                                               "BUKIT BATOK",
+                                                                               "HOUGANG",
+                                                                               "ANG MO KIO",
+                                                                               "BUKIT PANJANG",
+                                                                               "SUNGEI KADUT",
+                                                                               "YISHUN",
+                                                                               "PUNGGOL",
+                                                                               "CHOA CHU KANG",
+                                                                               "SENGKANG",
+                                                                               "CENTRAL WATER CATCHMENT",
+                                                                               "SEMBAWANG",
+                                                                               "WOODLANDS"
+                                                                               ))
+                                                  )
                                                 ),
                                                 uiOutput("netStatsExplainerp1"),
-                                                hr(),
-                                                uiOutput("netStatsExplainerp2"),
+                                                br(),
                                        ),
                            ),
                            
                            
                   ),
                   # 3rd Tab
-                  tabPanel("Test Page",
+                  tabPanel("Hotspot Analysis",
                            
                   ),
                 )
@@ -228,6 +202,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   id <- NULL
+  tmap_options(check.and.fix = TRUE)
   
   output$mapPlot <- renderTmap({
     # Filter binlocation data based on selected bin type
@@ -240,6 +215,98 @@ server <- function(input, output, session) {
       tm_shape(filtered_binlocation) +
       tm_dots()
   })
+  
+  output$kdePlot <- renderTmap({
+    # Convert binlocation to spatial objects
+    bin_sf <- as_Spatial(binlocation)
+    bin_sp <- as(bin_sf, "SpatialPoints")
+    bin_ppp <- as(bin_sp, "ppp")
+    bin_ppp.km <- rescale(bin_ppp, 1000, "km")
+    
+    # Get selected kernel name from input
+    kernel_name <- input$kernel_name
+    
+    print(kernel_name)
+    
+    # Define bandwidth using selected kernel
+    bw_method <- switch(kernel_name,
+                        "quartic" = "quartic",
+                        "dis" = "dis",
+                        "epanechnikov" = "epanechnikov",
+                        "uniform" = "gaussian")  # Default to gaussian if unknown kernel
+    
+    # Compute kernel density estimation
+    kde_bin_bw <- density(bin_ppp.km,
+                          sigma = bw.diggle,  # Assuming bw.diggle is predefined
+                          edge = TRUE,
+                          kernel = bw_method)
+    
+    gridded_kde_bin_bw <- as.SpatialGridDataFrame.im(kde_bin.bw)
+    spplot(gridded_kde_bin_bw)
+    
+    # Create a raster from the KDE result
+    kde_raster <- raster(gridded_kde_bin_bw)
+    projection(kde_raster) <- CRS("+init=EPSG:3414")
+    
+    # Plot KDE contours on top of polygons
+    tm_shape(kde_raster) +
+      tm_raster(style = "cont", palette = "plasma") +
+      tm_layout(legend.outside = TRUE, legend.show = TRUE, legend.text.color = "white")
+  })
+  
+  
+  output$roadBinPlot <- renderTmap({
+    # Debugging: Print selected area
+    print(input$area)
+    
+    # Filter mpsz based on selected area
+    filtered_mpsz <- mpsz %>%
+      filter(PLN_AREA_N == input$area) %>%
+      st_union() %>%
+      st_make_valid() %>%
+      st_transform(crs = 3414)
+    
+    # Debugging: Print filtered mpsz
+    print(filtered_mpsz)
+    
+    # Perform intersection with roads_in_singapore based on selected area
+    intersection_roads <- st_intersection(roads_in_singapore, filtered_mpsz)
+    
+    # Debugging: Print intersection_roads
+    print(intersection_roads)
+    
+    # Filter out POINT geometries
+    filtered_roads <- intersection_roads[st_geometry_type(intersection_roads) != "POINT", ]
+    
+    # Debugging: Print filtered_roads
+    print(filtered_roads)
+    
+    # Cast non-POINT geometries to LINESTRINGs
+    casted_roads <- st_cast(filtered_roads, "LINESTRING")
+    
+    # Debugging: Print casted_roads
+    print(casted_roads)
+    
+    # Lixelize roads
+    lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
+    
+    # Extract samples
+    samples <- lines_center(lixels)
+    
+    # Intersect with bin locations
+    origin <- st_intersection(binlocation, filtered_mpsz)
+    
+    # Plot the map
+    tmap_mode('view')
+    tm_basemap("OpenStreetMap") +
+      tm_shape(casted_roads) +
+      tm_lines(col = "red") +
+      tm_shape(origin) + 
+      tm_dots()
+  })
+  
+  
+  
   
   
   # Home page UI
