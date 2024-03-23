@@ -25,7 +25,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                   title = div(
                     a(
                       h2("RecycleSG", style = "margin-top: -8px;padding-right:10px;padding-bottom:10px"),
-                      href = "https://spatialbros.netlify.app/"
+                      href = "https://is415-gaa-jkw.netlify.app/"
                     )
                   ),
                   tags$head(tags$style(
