@@ -1,0 +1,12 @@
+name: recyclesgshiny
+title:
+username: recyclewatch
+account: recyclewatch
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11571017
+bundleId: 8409203
+url: https://recyclewatch.shinyapps.io/recyclesgshiny/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
