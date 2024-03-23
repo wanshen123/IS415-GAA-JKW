@@ -25,7 +25,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                   title = div(
                     a(
                       h2("RecycleSG", style = "margin-top: -8px;padding-right:10px;padding-bottom:10px"),
-                      href = "https://spatialbros.netlify.app/"
+                      href = "https://is415-gaa-jkw.netlify.app/"
                     )
                   ),
                   tags$head(tags$style(
@@ -254,7 +254,7 @@ server <- function(input, output, session) {
                           edge = TRUE,
                           kernel = bw_method)
     
-    gridded_kde_bin_bw <- as.SpatialGridDataFrame.im(kde_bin.bw)
+    gridded_kde_bin_bw <- as.SpatialGridDataFrame.im(kde_bin_bw)
     spplot(gridded_kde_bin_bw)
     
     # Create a raster from the KDE result
