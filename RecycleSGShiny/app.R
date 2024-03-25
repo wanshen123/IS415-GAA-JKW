@@ -10,12 +10,15 @@ library(ggplot2)
 library(plotly)
 library(spatstat)
 library(raster)
+library(maptools)
 
 mpsz <- st_read(dsn = "testdata", layer = "MPSZ-2019")
 popagsex <- read_csv("testdata/respopagesextod2011to2020.csv")
 childcare <- st_read("testdata/PreSchoolsLocation.geojson") %>% st_transform(crs = 3414)
 binlocation <- read_rds("Data/alba/ewbins.rds")
 roads_in_singapore <- read_rds("testdata/sgRoad.rds")
+inbins <- read_rds("Data/nea/inbins.rds")
+sg_sf <- st_read(dsn = "testdata", layer = "CostalOutline")
 
 
 # Define UI for application
@@ -131,7 +134,13 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                                                 choices = list("Quartic" = "quartic",
                                                                                "Dis" = "dis",
                                                                                "Epanechnikov" = "epanechnikov",
-                                                                               "Uniform" = "uniform")),
+                                                                               "Gaussian" = "gaussian")),
+                                                    h4("Bandwidth Selection"),
+                                                    h5("Select the bandwidth name:"),
+                                                    selectInput(inputId = "bandwidth_name",
+                                                                label = "Bandwidth Name:",
+                                                                choices = c("diggle", "ppl", "CvL", "scott"),
+                                                                selected = "ppl")
                                                   ),
                                                   
                                                 ),
@@ -217,39 +226,54 @@ server <- function(input, output, session) {
     # Convert binlocation to spatial objects
     bin_sf <- as_Spatial(binlocation)
     bin_sp <- as(bin_sf, "SpatialPoints")
+    sg_sf <- st_transform(sg_sf, crs = 3414)
+    sg <- as_Spatial(sg_sf)
+    sg_sp <- as(sg, "SpatialPolygons")
+    sg_owin <- as.owin(sg_sp)
+    
+    # Create ppp object
     bin_ppp <- as(bin_sp, "ppp")
-    bin_ppp.km <- rescale(bin_ppp, 1000, "km")
+    binSG_ppp <- bin_ppp[sg_owin] 
+    bin_ppp.km <- rescale(binSG_ppp, 1, "km") # set to 1000 for working legend
     
     # Get selected kernel name from input
     kernel_name <- input$kernel_name
-    
-    print(kernel_name)
     
     # Define bandwidth using selected kernel
     bw_method <- switch(kernel_name,
                         "quartic" = "quartic",
                         "dis" = "dis",
                         "epanechnikov" = "epanechnikov",
-                        "uniform" = "gaussian")  # Default to gaussian if unknown kernel
+                        "gaussian" = "gaussian")  # Default to gaussian if unknown kernel
+    
+    # Get selected bandwidth name from input
+    bandwidth_name <- input$bandwidth_name
+  
+    # Define bandwidth sigma
+    bw_sigma <- switch(bandwidth_name,
+                       "diggle" = bw.diggle,
+                       "ppl" = bw.ppl,
+                       "CvL" = bw.CvL,
+                       "scott" = bw.scott)
     
     # Compute kernel density estimation
     kde_bin_bw <- density(bin_ppp.km,
-                          sigma = bw.diggle,  # Assuming bw.diggle is predefined
+                          sigma = bw_sigma, 
                           edge = TRUE,
                           kernel = bw_method)
     
+    # Convert to raster
     gridded_kde_bin_bw <- as.SpatialGridDataFrame.im(kde_bin_bw)
-    spplot(gridded_kde_bin_bw)
-    
-    # Create a raster from the KDE result
     kde_raster <- raster(gridded_kde_bin_bw)
     projection(kde_raster) <- CRS("+init=EPSG:3414")
     
     # Plot KDE contours on top of polygons
+    tmap_mode("plot")
     tm_shape(kde_raster) +
       tm_raster(style = "cont", palette = "plasma") +
       tm_layout(legend.outside = TRUE, legend.show = TRUE, legend.text.color = "white")
   })
+  
   
   
   output$roadBinPlot <- renderTmap({
