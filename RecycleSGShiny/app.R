@@ -22,7 +22,7 @@ sg_sf <- st_read(dsn = "testdata", layer = "CostalOutline")
 
 
 # Define UI for application
-ui <- fluidPage(theme = shinytheme("cosmo"),
+ui <- fluidPage(theme = shinytheme("darkly"),
                 navbarPage(                                                
                   title = div(
                     a(
@@ -83,7 +83,13 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                     uiOutput("aboutus")),
                            )
                   ),
-                  # 2nd Tab
+                  
+                  tabPanel("Exploratory Data Analysis",
+                           titlePanel("Data Exploration"),
+                           hr(),
+                           ),
+        
+                  # 3rd Tab
                   tabPanel("KDE Analysis",
                            titlePanel("Network Constrained Point Pattern Analysis"),
                            hr(),
@@ -112,10 +118,10 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                     h5("Select the type of bin to be displayed on the map"),
                                                     selectInput(inputId = "bin_type",
                                                                 label = "Select Bin Type",
-                                                                choices = unique(binlocation$`Type of Bin Placed`))
-                                                  )
+                                                                choices = unique(binlocation$`Type of Bin Placed`)),
+                                                  ),
                                                   
-                                                )
+                                                ),
                                                 
                                        ),
                                        tabPanel("Kernel Density Estimation", 
@@ -123,7 +129,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                   mainPanel(
                                                     tmapOutput("kdePlot", width = "100%", height = "700"),
                                                     br(),
-                                                    verbatimTextOutput("netKDESettings")
+                                                    verbatimTextOutput("netKDESettings"),
                                                   ),
                                                   sidebarPanel(
                                                     shinyjs::useShinyjs(),
@@ -141,11 +147,11 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                                 label = "Bandwidth Name:",
                                                                 choices = c("diggle", "ppl", "CvL", "scott"),
                                                                 selected = "ppl")
-                                                  )
+                                                  ),
                                                   
                                                 ),
                                                 uiOutput("netKDEExpaliner"),
-                                                br()
+                                                br(),
                                        ),
                                        tabPanel("Network Constrained KDE (NetKDE) Analysis", 
                                                 sidebarLayout(
@@ -196,23 +202,21 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                   )
                                                 ),
                                                 uiOutput("netStatsExplainerp1"),
-                                                br()
-                                       )
-                           )
+                                                br(),
+                                       ),
+                           ),
                            
                            
                   ),
-                  # 3rd Tab
+                  # 4th Tab
                   tabPanel("Hotspot Analysis",
                            titlePanel("Hot Spot and Cold Spot Area Analysis (HCSA)"),
                            tabsetPanel(type = "tabs",
-                                       tabPanel("Introduction"
-                                  
-                                       ),  
+                                       tabPanel("Introduction"),
                                        tabPanel("Local Indicators of Spatial Association (LISA) Map",
                                                 sidebarLayout(
                                                   sidebarPanel(
-                                                    selectInput("map_var", "Map:", 
+                                                    selectInput("map_type", "Map:", 
                                                                 choices = c("CartoDB", "Openstreetmap", "ESRI"), 
                                                                 selected = "CartoDB"),
                                                     sliderInput("threshold", "Significant Level:", min = 0.05, max = 0.2, value = 0.05, step = 0.05),
@@ -223,7 +227,6 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                     tmapOutput("lisamap", width = "100%", height = "700")
                                                   )
                                                 )
-                                                
                                        ),
                                        tabPanel("Visualising Hot Spot & Cold Spot Areas", 
                                                 sidebarLayout(
@@ -240,8 +243,8 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                 )
                                        )
                            )
-                           )
-                )
+                  )
+)
 )
 
 
@@ -271,24 +274,24 @@ server <- function(input, output, session) {
     sg_sp <- as(sg, "SpatialPolygons")
     sg_owin <- as.owin(sg_sp)
     
+    # Create ppp object
     bin_ppp <- as(bin_sp, "ppp")
     binSG_ppp <- bin_ppp[sg_owin] 
-    bin_ppp.km <- rescale(binSG_ppp, 1, "km")
+    bin_ppp.km <- rescale(binSG_ppp, 1, "km") # set to 1000 for working legend
     
     # Get selected kernel name from input
     kernel_name <- input$kernel_name
-    
     
     # Define bandwidth using selected kernel
     bw_method <- switch(kernel_name,
                         "quartic" = "quartic",
                         "dis" = "dis",
                         "epanechnikov" = "epanechnikov",
-                        "gaussian" = "gaussian")   # Default to gaussian if unknown kernel
+                        "gaussian" = "gaussian")  # Default to gaussian if unknown kernel
     
     # Get selected bandwidth name from input
     bandwidth_name <- input$bandwidth_name
-    
+  
     # Define bandwidth sigma
     bw_sigma <- switch(bandwidth_name,
                        "diggle" = bw.diggle,
@@ -298,13 +301,12 @@ server <- function(input, output, session) {
     
     # Compute kernel density estimation
     kde_bin_bw <- density(bin_ppp.km,
-                          sigma = bw_sigma,  
+                          sigma = bw_sigma, 
                           edge = TRUE,
                           kernel = bw_method)
     
     # Convert to raster
     gridded_kde_bin_bw <- as.SpatialGridDataFrame.im(kde_bin_bw)
-    
     kde_raster <- raster(gridded_kde_bin_bw)
     projection(kde_raster) <- CRS("+init=EPSG:3414")
     
@@ -314,6 +316,7 @@ server <- function(input, output, session) {
       tm_raster(style = "cont", palette = "plasma") +
       tm_layout(legend.outside = TRUE, legend.show = TRUE, legend.text.color = "white")
   })
+  
   
   
   output$roadBinPlot <- renderTmap({
@@ -366,7 +369,6 @@ server <- function(input, output, session) {
       tm_dots()
   })
   
-<<<<<<< Updated upstream
   output$networkPlot <- renderTmap({
     # Debugging: Print selected area
     print(input$area)
@@ -444,9 +446,8 @@ server <- function(input, output, session) {
       tm_dots()
   })
   
-=======
   output$lisamap <- renderTmap({
-    map_type = input$map_var
+    map_type = input$map_type
     
     map <- switch(map_type,
                   "CartoDB" = "CartoDB.Positron",
@@ -462,7 +463,7 @@ server <- function(input, output, session) {
                         "Blue Bins" = readRDS("Data/lisa/lisa_blue.rds"),
                         "E-Waste Bins" = readRDS("Data/lisa/lisa_ew.rds"),
                         "Incentive Bins" = readRDS("Data/lisa/lisa_in.rds") 
-                        )
+    )
     
     category <- input$category
     cat <- switch(category,
@@ -491,7 +492,6 @@ server <- function(input, output, session) {
       tm_borders(alpha = 0.4)+
       tm_view(set.view = 11, set.zoom.limits = c(11,15))
   })
->>>>>>> Stashed changes
   
   output$vhcsa <- renderTmap({
     map_type = input$map_var
@@ -524,7 +524,7 @@ server <- function(input, output, session) {
     
     # Render map
     tmap_mode("plot")
-      tm_basemap(map) +
+    tm_basemap(map) +
       tm_shape(hcsa_data) +
       tm_polygons(alpha = 0.1) +
       tm_borders(alpha = 0.5) +
@@ -533,6 +533,10 @@ server <- function(input, output, session) {
       tm_borders(alpha = 0.4) +
       tm_view(set.view = 11, set.zoom.limits = c(11,15))
   })
+  
+  
+  
+  
   
   # Home page UI
   output$projectMotivation <- renderUI(HTML("<h4> In today’s technological advancing world, there are many useful and interesting spatial data sources that exist in the forms of Geospatial and Aspatial format. Geographical Geospatial data sets the foundation based on the geographical boundary locations and the Aspatial data are the records of observation that can be further prepared to be used to derive meaningful insights. 
