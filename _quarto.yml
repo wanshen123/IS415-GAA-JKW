@@ -9,6 +9,10 @@ website:
         text: Home
       - href: Proposal/Proposal.qmd
         text: Proposal
+      - href: dataPreProcess.qmd
+        text: Data Pre-Processing
+      - href: https://www.google.com
+        text: Shiny App
 
 format:
   html:

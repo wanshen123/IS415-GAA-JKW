@@ -11,6 +11,7 @@ library(plotly)
 library(spatstat)
 library(raster)
 library(maptools)
+library(tidyr)
 
 mpsz <- st_read(dsn = "testdata", layer = "MPSZ-2019")
 popagsex <- read_csv("testdata/respopagesextod2011to2020.csv")
@@ -22,7 +23,7 @@ sg_sf <- st_read(dsn = "testdata", layer = "CostalOutline")
 
 
 # Define UI for application
-ui <- fluidPage(theme = shinytheme("darkly"),
+ui <- fluidPage(theme = shinytheme("cosmo"),
                 navbarPage(                                                
                   title = div(
                     a(
@@ -86,8 +87,25 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                   
                   tabPanel("Exploratory Data Analysis",
                            titlePanel("Data Exploration"),
-                           hr(),
-                           ),
+                           tabPanel("Introduction",
+                                    sidebarLayout(
+                                      sidebarPanel(
+                                        selectInput("map_choice", "Map:", 
+                                                    choices = c("CartoDB", "Openstreetmap", "ESRI"), 
+                                                    selected = "CartoDB"),
+                                        selectInput("bin_choice", "Bin Type:", 
+                                                    choices = c("Blue Bins", "E-Waste Bins", "Incentive Bins", "All Bins"), 
+                                                    selected = "E-Waste Bins"),
+                                        checkboxInput("switch_button", "Population Density", value = TRUE)
+                                      ),
+                                      mainPanel(
+                                        tmapOutput("edamap", width = "100%", height = "700")
+                                      )
+                                    ),
+                                    hr(),
+                                    uiOutput("edadescription") 
+                           )
+                  ),
         
                   # 3rd Tab
                   tabPanel("KDE Analysis",
@@ -107,23 +125,23 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                                          imageOutput("introductionKernel")),
                                                 ),
                                        ),  
-                                       tabPanel("Bin Location Points",
-                                                sidebarLayout(
-                                                  mainPanel(
-                                                    tmapOutput("mapPlot", width = "100%", height = "700"),
-                                                  ),
-                                                  sidebarPanel(
-                                                    shinyjs::useShinyjs(),
-                                                    h4("Bin Location Points"),
-                                                    h5("Select the type of bin to be displayed on the map"),
-                                                    selectInput(inputId = "bin_type",
-                                                                label = "Select Bin Type",
-                                                                choices = unique(binlocation$`Type of Bin Placed`)),
-                                                  ),
+                                       #tabPanel("Bin Location Points",
+                                        #        sidebarLayout(
+                                         #         mainPanel(
+                                          #          tmapOutput("mapPlot", width = "100%", height = "700"),
+                                           #       ),
+                                            #      sidebarPanel(
+                                             #       shinyjs::useShinyjs(),
+                                              #      h4("Bin Location Points"),
+                                               #     h5("Select the type of bin to be displayed on the map"),
+                                                #    selectInput(inputId = "bin_type",
+                                                 #               label = "Select Bin Type",
+                                                  #              choices = unique(binlocation$`Type of Bin Placed`)),
+                                                  #),
                                                   
-                                                ),
+                                                #),
                                                 
-                                       ),
+                                       #),
                                        tabPanel("Kernel Density Estimation", 
                                                 sidebarLayout(
                                                   mainPanel(
@@ -133,16 +151,22 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                                   ),
                                                   sidebarPanel(
                                                     shinyjs::useShinyjs(),
-                                                    h4("Kernel Density Estimation"),
-                                                    h5("Kernel Density Estimation Methods"),
+                                                    h4("Bandwidth Type:"),
+                                                    h5("Select the bandwidth type:"),
+                                                    selectInput(inputId = "bandwidth_type",
+                                                                       label = "Bandwidth Type:",
+                                                                       choices = c("Adaptive Bandwidth" = "Adaptive Bandwidth",
+                                                                                   "Fixed Bandwidth" = "Fixed Bandwidth")),
+                                                    h4("Kernel Density Estimation", id = "kernel_header"),
+                                                    h5("Kernel Density Estimation Methods", id = "kernel_label"),
                                                     selectInput(inputId = "kernel_name",
                                                                 label = "Choose the kernel to be used:",
                                                                 choices = list("Quartic" = "quartic",
-                                                                               "Dis" = "dis",
+                                                                               "Disc" = "disc",
                                                                                "Epanechnikov" = "epanechnikov",
                                                                                "Gaussian" = "gaussian")),
-                                                    h4("Bandwidth Selection"),
-                                                    h5("Select the bandwidth name:"),
+                                                    h4("Bandwidth Selection", id = "bandwidth_header"),
+                                                    h5("Select the bandwidth name:", id = "bandwidth_label"),
                                                     selectInput(inputId = "bandwidth_name",
                                                                 label = "Bandwidth Name:",
                                                                 choices = c("diggle", "ppl", "CvL", "scott"),
@@ -212,7 +236,15 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                   tabPanel("Hotspot Analysis",
                            titlePanel("Hot Spot and Cold Spot Area Analysis (HCSA)"),
                            tabsetPanel(type = "tabs",
-                                       tabPanel("Introduction"),
+                                       tabPanel("Introduction",
+                                                fluidRow(
+                                                  column(8,
+                                                         h2("Guide: Introduction to Hotspot and Coldspot Analysis for Recycling Bins in Singapore"),
+                                                         hr(),
+                                                         uiOutput("introductionhcsa")                         
+                                                         
+                                                  ),
+                                                ),),
                                        tabPanel("Local Indicators of Spatial Association (LISA) Map",
                                                 sidebarLayout(
                                                   sidebarPanel(
@@ -226,7 +258,10 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                                   mainPanel(
                                                     tmapOutput("lisamap", width = "100%", height = "700")
                                                   )
-                                                )
+                                                ),
+                                                column(10,
+                                                uiOutput("lisaExplainer")),
+                                                br(),
                                        ),
                                        tabPanel("Visualising Hot Spot & Cold Spot Areas", 
                                                 sidebarLayout(
@@ -240,7 +275,11 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                                   mainPanel(
                                                     tmapOutput("vhcsa", width = "100%", height = "700")
                                                   )
-                                                )
+                                                  
+                                                ),
+                                                column(10,
+                                                uiOutput("hcsaExplainer")),
+                                                br(),
                                        )
                            )
                   )
@@ -253,16 +292,103 @@ server <- function(input, output, session) {
   id <- NULL
   tmap_options(check.and.fix = TRUE)
   
-  output$mapPlot <- renderTmap({
+  #output$mapPlot <- renderTmap({
     # Filter binlocation data based on selected bin type
-    filtered_binlocation <- binlocation %>%
-      filter(`Type of Bin Placed` == input$bin_type)
+    #filtered_binlocation <- binlocation %>%
+     # filter(`Type of Bin Placed` == input$bin_type)
     
     # Plot map with filtered binlocation data
-    tm_shape(mpsz) +
-      tm_polygons() +
-      tm_shape(filtered_binlocation) +
-      tm_dots()
+   # tm_shape(mpsz) +
+    #  tm_polygons() +
+    #  tm_shape(filtered_binlocation) +
+    #  tm_dots()
+  #})
+  
+  output$edamap <- renderTmap({
+    # Set pop data equals read csv
+    pop <- read_csv("Data/singstat/PopulationSG_2023.csv")
+    # Read rds
+    ew_b <- readRDS("Data/alba/ewbins.rds")
+    in_b <- readRDS("Data/nea/inbins.rds")
+    # Read shape file that is not geojson
+    blue_b <- st_read(dsn = "Data/gov", layer = "RECYCLINGBINS")
+    
+    
+    popdata <- pop %>%
+      group_by(PA, SZ, AG) %>%
+      summarise(`POP` = sum(`Pop`)) %>%
+      ungroup() %>%
+      tidyr::pivot_wider(names_from = AG, 
+                         values_from = POP) %>%
+      mutate(`TOTAL` = rowSums(.[3:21])) %>%  
+      dplyr::select(`PA`, `SZ`, `TOTAL`)
+    
+    popdata <- popdata %>%
+      mutate_at(.vars = vars(PA, SZ), 
+                .funs = toupper)
+    
+    pop <- left_join(mpsz, popdata,
+                     by = c("SUBZONE_N" = "SZ"))
+    
+    
+    # Check for invalid geometries
+    invalid_geoms <- !st_is_valid(pop)
+    # Fix invalid geometries
+    pop[invalid_geoms, ] <- st_make_valid(pop[invalid_geoms, ])
+    
+    map_type = input$map_choice
+    
+    map <- switch(map_type,
+                  "CartoDB" = "CartoDB.Positron",
+                  "Openstreetmap" = "OpenStreetMap",
+                  "ESRI" = "Esri.WorldTopoMap")
+    
+    pop_check <- input$switch_button
+    bin_type <- input$bin_choice
+    
+    # Plot map
+    map <- tm_basemap(map)
+    
+    if (pop_check){
+      map <- map + 
+        tm_shape(pop)+
+        tm_fill("TOTAL", 
+                style = "quantile", 
+                palette = "Blues",
+                alpha = 0.7) +
+        tm_borders(alpha = 0.5) 
+    }
+    if (bin_type == "Blue Bins"){
+      map <- map +
+        tm_shape(blue_b)+
+        tm_symbols(size = 0.005, col = "blue", shape = 2)
+    }
+    
+    if (bin_type == "E-Waste Bins"){
+      map <- map +
+        tm_shape(ew_b)+
+        tm_symbols(size = 0.3, col = "green", shape = 2)
+    }
+    
+    if (bin_type == "Incentive Bins"){
+      map <- map +
+        tm_shape(in_b)+
+        tm_symbols(size = 0.5, col = "red", shape = 2)
+    }
+    
+    if (bin_type == "All Bins"){
+      map <- map +
+        tm_shape(blue_b)+
+        tm_symbols(size = 0.005, col = "blue", shape = 2) +
+        tm_shape(ew_b)+
+        tm_symbols(size = 0.3, col = "green", shape = 2) +
+        tm_shape(in_b)+
+        tm_symbols(size = 0.5, col = "red", shape = 2)
+    }
+    
+    map <- map +
+      tm_view(set.view = 11, set.zoom.limits = c(11,15))
+
   })
   
   output$kdePlot <- renderTmap({
@@ -279,42 +405,68 @@ server <- function(input, output, session) {
     binSG_ppp <- bin_ppp[sg_owin] 
     bin_ppp.km <- rescale(binSG_ppp, 1, "km") # set to 1000 for working legend
     
-    # Get selected kernel name from input
-    kernel_name <- input$kernel_name
-    
-    # Define bandwidth using selected kernel
-    bw_method <- switch(kernel_name,
-                        "quartic" = "quartic",
-                        "dis" = "dis",
-                        "epanechnikov" = "epanechnikov",
-                        "gaussian" = "gaussian")  # Default to gaussian if unknown kernel
-    
-    # Get selected bandwidth name from input
-    bandwidth_name <- input$bandwidth_name
-  
-    # Define bandwidth sigma
-    bw_sigma <- switch(bandwidth_name,
-                       "diggle" = bw.diggle,
-                       "ppl" = bw.ppl,
-                       "CvL" = bw.CvL,
-                       "scott" = bw.scott)
-    
-    # Compute kernel density estimation
-    kde_bin_bw <- density(bin_ppp.km,
-                          sigma = bw_sigma, 
-                          edge = TRUE,
-                          kernel = bw_method)
-    
-    # Convert to raster
-    gridded_kde_bin_bw <- as.SpatialGridDataFrame.im(kde_bin_bw)
-    kde_raster <- raster(gridded_kde_bin_bw)
-    projection(kde_raster) <- CRS("+init=EPSG:3414")
+    if(input$bandwidth_type == "Adaptive Bandwidth"){
+      shinyjs::hide("bandwidth_name")
+      shinyjs::hide("bandwidth_label")
+      shinyjs::hide("bandwidth_header")
+      shinyjs::hide("kernel_name")
+      shinyjs::hide("kernel_label")
+      shinyjs::hide("kernel_header")
+      
+      kde_origin_adaptive <- adaptive.density(bin_ppp.km, method="kernel")
+      
+      # Convert to raster
+      gridded_kde_origin_adaptive <- as.SpatialGridDataFrame.im(kde_origin_adaptive)
+      kde_raster <- raster(gridded_kde_origin_adaptive)
+      projection(kde_raster) <- CRS("+init=EPSG:3414")
+      
+    }
+    else{
+      shinyjs::show("bandwidth_name")
+      shinyjs::show("bandwidth_label")
+      shinyjs::show("bandwidth_header")
+      shinyjs::show("kernel_name")
+      shinyjs::show("kernel_label")
+      shinyjs::show("kernel_header")
+      
+      # Get selected kernel name from input
+      kernel_name <- input$kernel_name
+      
+      # Define bandwidth using selected kernel
+      bw_method <- switch(kernel_name,
+                          "quartic" = "quartic",
+                          "disc" = "disc",
+                          "epanechnikov" = "epanechnikov",
+                          "gaussian" = "gaussian")  # Default to gaussian if unknown kernel
+      
+      # Get selected bandwidth name from input
+      bandwidth_name <- input$bandwidth_name
+      
+      # Define bandwidth sigma
+      bw_sigma <- switch(bandwidth_name,
+                         "diggle" = bw.diggle,
+                         "ppl" = bw.ppl,
+                         "CvL" = bw.CvL,
+                         "scott" = bw.scott)
+      
+      # Compute kernel density estimation
+      kde_bin_bw <- density(bin_ppp.km,
+                            sigma = bw_sigma, 
+                            edge = TRUE,
+                            kernel = bw_method)
+      
+      # Convert to raster
+      gridded_kde_bin_bw <- as.SpatialGridDataFrame.im(kde_bin_bw)
+      kde_raster <- raster(gridded_kde_bin_bw)
+      projection(kde_raster) <- CRS("+init=EPSG:3414")
+    }
     
     # Plot KDE contours on top of polygons
     tmap_mode("plot")
     tm_shape(kde_raster) +
       tm_raster(style = "cont", palette = "plasma") +
-      tm_layout(legend.outside = TRUE, legend.show = TRUE, legend.text.color = "white")
+      tm_layout(legend.outside = TRUE, legend.show = TRUE, legend.text.color = "white")+
+      tm_view(set.view = 11, set.zoom.limits = c(11,15))
   })
   
   
@@ -807,11 +959,119 @@ server <- function(input, output, session) {
                                             <img src='sppakernel.png' width='50%'>
                                                                                   "))
   
+  output$introductionhcsa <- renderUI(HTML("
+                                           <p>Welcome to an exploration of hotspot and coldspot analysis in Singapore's efforts towards better waste management, specifically focusing on the placement of recycling bins. In this guide, we aim to shed light on how this analytical approach helps optimize the locations of recycling bins across our city-state, ensuring that they are where they're needed most.</p><br>
+                                           <h4>What are Hotspot and Coldspot Analysis?</h4>
+                                           <p>Hotspot and coldspot analysis might sound technical, but the concept is quite simple. It's about identifying areas where something is happening a lot (hotspots) or not happening much at all (coldspots). Think of it as shining a spotlight on where things are bustling with activity and where they're not.</p>
+                                           <br><h4>Why Does it Matter for Recycling Bins?</h4>
+                                           <p>When it comes to recycling, it's essential to have bins where they can make the most impact. Hotspot and coldspot analysis help us figure out exactly where these bins should go:</p>
+                                           <ul>
+                                             <li><b>Hotspots</b>: These are areas bustling with people and activities, like shopping malls, residential neighborhoods, or office districts. Placing recycling bins in hotspots ensures that they're easily accessible to many people, encouraging more recycling.</li>
+                                             <li><b>Coldspots</b>: On the other hand, coldspots are areas where recycling might not be happening much, perhaps because there aren't enough bins or people aren't aware of recycling options. Identifying these areas helps us focus on improving recycling rates by adding bins or raising awareness.</li>
+                                           </ul>
+                                           <br><p>Hotspot and coldspot analysis might sound like complicated concepts, but they're powerful tools in our mission towards a greener, more sustainable Singapore. By understanding where recycling bins should go, we're taking steps to make recycling easier and more accessible for everyone. So the next time you toss a can or a bottle into a recycling bin, know that it's part of a larger effort guided by data to create a cleaner, healthier environment for us all.</p>"))
   
+  output$lisaExplainer <- renderUI(HTML("
+                                           <br><br><h1>Guide to Understanding and Interpreting LISA Map for R Programming Shiny App</h1>
+                                          <br><p>The Local Indicators of Spatial Association (LISA) map is a powerful tool for analyzing spatial patterns and identifying outliers and clusters within geographical areas. When integrated into a Shiny app using R programming, it becomes a dynamic and interactive tool for visualizing spatial relationships. Here's a step-by-step guide to understanding and interpreting the LISA map:</p>
+                                          
+                                          <h2>Understanding LISA Map</h2>
+                                          <br><p>The LISA map is a categorical map that displays spatial clusters and outliers based on statistical analysis. It identifies four types of spatial patterns:</p>
+                                          <ul>
+                                            <li><strong>High-High Clusters:</strong> Areas with high attribute values surrounded by neighboring areas with high values.</li>
+                                            <li><strong>Low-Low Clusters:</strong> Areas with low attribute values surrounded by neighboring areas with low values.</li>
+                                            <li><strong>High-Low Outliers:</strong> Areas with high attribute values surrounded by neighboring areas with low values.</li>
+                                            <li><strong>Low-High Outliers:</strong> Areas with low attribute values surrounded by neighboring areas with high values.</li>
+                                          </ul>
+                                          
+                                          <h2>Interpreting Outliers and Clusters</h2>
+                                          <p>Each type of outlier or cluster indicates a different spatial pattern:</p>
+                                          <ul>
+                                            <li><strong>High-High Clusters:</strong> These areas represent significant clusters of high attribute values. They could indicate areas of concentrated development, economic activity, or other factors depending on the specific attributes being analyzed.</li>
+                                            <li><strong>Low-Low Clusters:</strong> Conversely, low-low clusters indicate areas with consistently low attribute values. These could represent areas of low development, deprivation, or other factors.</li>
+                                            <li><strong>High-Low Outliers:</strong> High-low outliers are areas with unexpectedly high attribute values compared to their neighbors. These could signify areas of rapid development or unique characteristics compared to their surroundings.</li>
+                                            <li><strong>Low-High Outliers:</strong> Conversely, low-high outliers have low attribute values surrounded by areas with high values. These outliers could represent areas with potential for improvement or areas undergoing decline.</li>
+                                          </ul>
+                                          
+                                          <h2>Significance Level</h2>
+                                          <br><p>The significance level, often denoted as alpha (&alpha;), determines the threshold for identifying statistically significant spatial patterns. A commonly used significance level is 0.05, indicating a 5% chance of observing the detected spatial pattern under the null hypothesis of spatial randomness.In our case, we allow interaction of up to 20%, meaning that spatial patterns with a p-value less than or equal to 0.2 are considered statistically significant.</p>
+                                          
+                                          <br><h4>By following this guide, users can effectively interpret and utilize LISA maps within R programming Shiny apps to gain insights into spatial patterns, clusters, and outliers within their geographical datasets, while considering the significance level for identifying statistically meaningful results.</h4>
+                                        "))
   
+  output$hcsaExplainer <- renderUI(HTML("
+                                           <br><br><h1>Guide to Understanding Hotspot and Coldspot Areas</h1>
+                                            <br><p>Hotspot and coldspot areas refer to regions within a particular dataset or geographical area that exhibit unusually high (hotspot) or low (coldspot) values of a certain attribute or characteristic. These areas can provide valuable insights into various phenomena, ranging from socioeconomic trends to environmental conditions. One common method used to identify hotspot and coldspot areas is the Gi* statistic, which measures spatial clustering of values. Here's a guide to help you understand how to read and interpret hotspot and coldspot areas, focusing on the Gi* statistic:</p>
+                                            <h2>What is the Gi* statistic?</h2>
+                                            <br><p>
+                                              The Gi* statistic, also known as the Getis-Ord Gi* statistic, is a measure of spatial autocorrelation used to identify clustering of high or low attribute values within a dataset. It calculates whether high or low values of a variable are clustered together in space or if they are randomly distributed.
+                                            </p>
+                                          
+                                            <h2>Interpreting Gi* Values:</h2>
+                                            <br><ul>
+                                              <li>
+                                                Positive values indicate clustering of high values (hotspots), while negative values indicate clustering of low values (coldspots).
+                                              </li>
+                                              <li>
+                                                A value of 0 indicates random spatial distribution.
+                                              </li>
+                                              <li>
+                                                The higher the absolute value of Gi*, the stronger the clustering.
+                                              </li>
+                                            </ul>
+                                          
+                                            <h2>Benefits of Understanding Hotspot and Coldspot Areas:</h2>
+                                            <br><ul>
+                                               <li>
+                                                  <strong>Identifying Hotspot and Coldspot Areas for Recycling Bin Placement:</strong> Hotspot and coldspot analysis can help understand where there is a scarcity of recycling bins, especially in densely populated areas, guiding the placement of recycling bins for optimal usage.
+                                                </li>
+                                                <li>
+                                                  <strong>Optimizing Waste Management Efforts:</strong> By analyzing hotspot and coldspot areas of recycling bin usage, authorities can optimize waste management efforts, ensuring efficient collection and recycling processes.
+                                                </li>
+                                                <li>
+                                                  <strong>Promoting Environmental Sustainability:</strong> Understanding hotspot and coldspot areas of recycling bin usage facilitates targeted educational campaigns and initiatives to promote recycling and environmental sustainability practices in Singapore.
+                                                </li>
+                                                <li>
+                                                  <strong>Evaluating Policy Effectiveness:</strong> Hotspot and coldspot analysis allows policymakers to evaluate the effectiveness of existing recycling policies and interventions, guiding future policy formulation and resource allocation.
+                                                </li>
+                                            </ul>
+                                            
+                                            <br><h4>Understanding hotspot and coldspot areas through the Gi* statistic empowers decision-makers to make informed choices, allocate resources effectively, and address spatial disparities in various domains. By following this guide, you can leverage spatial analysis techniques to uncover valuable insights within your dataset or geographical area of interest.</h4>
+                                        "))
   
+  output$edadescription <- renderUI(HTML("
+                                         <br><br><h2>Exploring Recycling Bin Distribution in Singapore</h2>
+                                          <br><h5>Welcome to the EDA (Exploratory Data Analysis) tab! This section offers an intuitive interface for delving into the distribution of recycling bins across Singapore. Here's a quick guide on how to make the most of this resource:</h5>
+                                          <br><ul>
+                                              <li>
+                                                  <p><strong>Explore Different Bin Types:</strong></p>
+                                                  <p>Utilize the interactive map or dropdown menus to visualize the distribution of various recycling bins, including blue bins for general waste, e-waste bins, and incentive bins.</p>
+                                              </li>
+                                              <li>
+                                                  <p><strong>Understand Population Distribution:</strong></p>
+                                                  <p>Gain insights into the population distribution across Singapore by examining the population density map combined with the distribution plot.</p>
+                                              </li>
+                                              <li>
+                                                  <p><strong>Analyze Population-Density Relationship:</strong></p>
+                                                  <p>Investigate how population density correlates with the distribution of recycling bins, pinpointing areas with high population density but limited recycling infrastructure.</p>
+                                              </li>
+                                              <li>
+                                                  <p><strong>Informed Decision Making:</strong></p>
+                                                  <p>Use the insights garnered from this EDA tool to make well-informed decisions regarding the placement and optimization of recycling infrastructure.</p>
+                                              </li>
+                                              <li>
+                                                  <p><strong>Targeted Interventions:</strong></p>
+                                                  <p>Identify areas characterized by low recycling bin density despite high population density, enabling targeted interventions to enhance recycling accessibility and foster sustainable waste management practices.</p>
+                                              </li>
+                                          </ul>
+                                          <br><h5>Embark on your exploration of the EDA tab now to uncover valuable insights into recycling bin distribution and population density dynamics in Singapore. Your contributions will play a vital role in cultivating a more environmentally conscious and resilient city-state!</h5>
+                                         "))
   
 }
+  
+  
+  
+  
 
 # Run the application 
 shinyApp(ui = ui, server = server)

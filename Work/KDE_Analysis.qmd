@@ -59,6 +59,7 @@ plot(kde_bin_bw)
 bw1 <- bw.diggle(bin_ppp)
 bw1
 ```
+
 ```{r}
 bin_ppp.km <- rescale(bin_ppp, 1000, "km")
 ```
@@ -198,7 +199,7 @@ origin_jw = st_intersection(binlocation, jw)
 ```
 
 ```{r}
-tmap_mode('view')
+tmap_mode('plot')
 tm_basemap("OpenStreetMap") +
 tm_shape(pung_roads) +
   tm_lines(col = "red") +
@@ -208,7 +209,7 @@ tmap_mode('plot')
 ```
 
 ```{r}
-tmap_mode('view')
+tmap_mode('plot')
 tm_basemap("OpenStreetMap") +
 tm_shape(tamp_roads) +
   tm_lines(col = "blue") +
@@ -228,7 +229,7 @@ tmap_mode('plot')
 ```
 
 ```{r}
-tmap_mode('view')
+tmap_mode('plot')
 tm_basemap("OpenStreetMap") +
 tm_shape(jw_roads) +
   tm_lines(col = "orange") +
