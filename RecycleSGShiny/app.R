@@ -150,7 +150,11 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                        tabPanel("Network Constrained KDE (NetKDE) Analysis", 
                                                 sidebarLayout(
                                                   mainPanel(
-                                                    tmapOutput("roadBinPlot", width = "100%", height = "700")
+                                                    h3("Road Bin Plot"),
+                                                    tmapOutput("roadBinPlot", width = "100%", height = "350"),
+                                                    br(),
+                                                    h3("NetKDE Plot"),
+                                                    tmapOutput("networkPlot", width = "100%", height = "350") # Second map plot
                                                   ),
                                                   sidebarPanel(
                                                     shinyjs::useShinyjs(),
@@ -158,8 +162,7 @@ ui <- fluidPage(theme = shinytheme("darkly"),
                                                     h5("Select the area to perform the analysis"),
                                                     selectInput(inputId = "area",
                                                                 label = "Select Area",
-                                                                choices = list("SINGAPORE RIVER",
-                                                                               "MUSEUM",
+                                                                choices = list("MUSEUM",
                                                                                "MARINE PARADE",
                                                                                "DOWNTOWN CORE",
                                                                                "QUEENSTOWN",
@@ -278,7 +281,7 @@ server <- function(input, output, session) {
   
   output$roadBinPlot <- renderTmap({
     # Debugging: Print selected area
-    print(input$area)
+    #print(input$area)
     
     # Filter mpsz based on selected area
     filtered_mpsz <- mpsz %>%
@@ -288,25 +291,25 @@ server <- function(input, output, session) {
       st_transform(crs = 3414)
     
     # Debugging: Print filtered mpsz
-    print(filtered_mpsz)
+    #print(filtered_mpsz)
     
     # Perform intersection with roads_in_singapore based on selected area
     intersection_roads <- st_intersection(roads_in_singapore, filtered_mpsz)
     
     # Debugging: Print intersection_roads
-    print(intersection_roads)
+    #print(intersection_roads)
     
     # Filter out POINT geometries
     filtered_roads <- intersection_roads[st_geometry_type(intersection_roads) != "POINT", ]
     
     # Debugging: Print filtered_roads
-    print(filtered_roads)
+    #print(filtered_roads)
     
     # Cast non-POINT geometries to LINESTRINGs
     casted_roads <- st_cast(filtered_roads, "LINESTRING")
     
     # Debugging: Print casted_roads
-    print(casted_roads)
+    #print(casted_roads)
     
     # Lixelize roads
     lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
@@ -323,6 +326,83 @@ server <- function(input, output, session) {
       tm_shape(casted_roads) +
       tm_lines(col = "red") +
       tm_shape(origin) + 
+      tm_dots()
+  })
+  
+  output$networkPlot <- renderTmap({
+    # Debugging: Print selected area
+    print(input$area)
+    
+    # Filter mpsz based on selected area
+    filtered_mpsz <- mpsz %>%
+      filter(PLN_AREA_N == input$area) %>%
+      st_union() %>%
+      st_make_valid() %>%
+      st_transform(crs = 3414)
+    
+    # Debugging: Print filtered mpsz
+    #print(filtered_mpsz)
+    
+    # Perform intersection with roads_in_singapore based on selected area
+    intersection_roads <- st_intersection(roads_in_singapore, filtered_mpsz)
+    
+    # Debugging: Print intersection_roads
+    #print(intersection_roads)
+    
+    # Filter out POINT geometries
+    filtered_roads <- intersection_roads[st_geometry_type(intersection_roads) != "POINT", ]
+    
+    # Debugging: Print filtered_roads
+    #print(filtered_roads)
+    
+    # Cast non-POINT geometries to LINESTRINGs
+    casted_roads <- st_cast(filtered_roads, "LINESTRING")
+    
+    # Debugging: Print casted_roads
+    #print(casted_roads)
+    
+    # Lixelize roads
+    lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
+    #print(lixels)
+    
+    # Extract samples
+    samples <- lines_center(lixels)
+    #print(samples)
+    
+    # Intersect with bin locations
+    origin <- st_intersection(binlocation, filtered_mpsz)
+    #print(origin)
+    
+    # Compute network kernel
+    densitiesMe <- nkde(casted_roads, 
+                           events = origin,
+                           w = rep(1,nrow(origin)),
+                           samples = samples,
+                           kernel_name = "quartic",
+                           bw = 300, 
+                           div= "bw", 
+                           method = "simple", 
+                           digits = 1, 
+                           tol = 1,
+                           grid_shape = c(1,1), 
+                           max_depth = 8,
+                           agg = 5, #we aggregate events within a 5m radius (faster calculation)
+                           sparse = TRUE,
+                           verbose = FALSE)
+    
+    # Create a dataframe for the densities
+    samples$density <- densitiesMe
+    lixels$density <- densitiesMe
+    
+    # rescaling to help the mapping
+    samples$density <- samples$density*1000
+    lixels$density <- lixels$density*1000
+    
+    # Plot the map
+    tmap_mode('plot')
+    tm_shape(lixels)+
+      tm_lines(col="density")+
+      tm_shape(origin)+
       tm_dots()
   })
   
