@@ -112,10 +112,10 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                     h5("Select the type of bin to be displayed on the map"),
                                                     selectInput(inputId = "bin_type",
                                                                 label = "Select Bin Type",
-                                                                choices = unique(binlocation$`Type of Bin Placed`)),
-                                                  ),
+                                                                choices = unique(binlocation$`Type of Bin Placed`))
+                                                  )
                                                   
-                                                ),
+                                                )
                                                 
                                        ),
                                        tabPanel("Kernel Density Estimation", 
@@ -123,7 +123,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                   mainPanel(
                                                     tmapOutput("kdePlot", width = "100%", height = "700"),
                                                     br(),
-                                                    verbatimTextOutput("netKDESettings"),
+                                                    verbatimTextOutput("netKDESettings")
                                                   ),
                                                   sidebarPanel(
                                                     shinyjs::useShinyjs(),
@@ -141,11 +141,11 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                                 label = "Bandwidth Name:",
                                                                 choices = c("diggle", "ppl", "CvL", "scott"),
                                                                 selected = "ppl")
-                                                  ),
+                                                  )
                                                   
                                                 ),
                                                 uiOutput("netKDEExpaliner"),
-                                                br(),
+                                                br()
                                        ),
                                        tabPanel("Network Constrained KDE (NetKDE) Analysis", 
                                                 sidebarLayout(
@@ -196,9 +196,9 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                   )
                                                 ),
                                                 uiOutput("netStatsExplainerp1"),
-                                                br(),
-                                       ),
-                           ),
+                                                br()
+                                       )
+                           )
                            
                            
                   ),
@@ -206,7 +206,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                   tabPanel("Hotspot Analysis",
                            titlePanel("Hot Spot and Cold Spot Area Analysis (HCSA)"),
                            tabsetPanel(type = "tabs",
-                                       tabPanel("Introduction",
+                                       tabPanel("Introduction"
                                   
                                        ),  
                                        tabPanel("Local Indicators of Spatial Association (LISA) Map",
@@ -238,9 +238,9 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                     tmapOutput("vhcsa", width = "100%", height = "700")
                                                   )
                                                 )
-                                       ),
-                           ),
-                           ),
+                                       )
+                           )
+                           )
                 )
 )
 
