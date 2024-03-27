@@ -14,13 +14,10 @@ library(maptools)
 library(tidyr)
 
 mpsz <- st_read(dsn = "testdata", layer = "MPSZ-2019")
-popagsex <- read_csv("testdata/respopagesextod2011to2020.csv")
-childcare <- st_read("testdata/PreSchoolsLocation.geojson") %>% st_transform(crs = 3414)
 binlocation <- read_rds("Data/alba/ewbins.rds")
 roads_in_singapore <- read_rds("testdata/sgRoad.rds")
 inbins <- read_rds("Data/nea/inbins.rds")
 sg_sf <- st_read(dsn = "testdata", layer = "CostalOutline")
-
 
 # Define UI for application
 ui <- fluidPage(theme = shinytheme("cosmo"),
@@ -62,24 +59,28 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                   )),
                   tabPanel("Home Page",
                            fluidRow(
-                             column(12,
+                             column(9,
                                     h2("Project Motivation"),
                                     hr(),
-                                    column(12,
+                                    column(10,
                                            uiOutput("projectMotivation"),                         
                                     ),
+                             ),
+                             column(3,
+                                    h1("RecycleSG"),
+                                    uiOutput("myList"),
                              ),
                              
                            ),
                            fluidRow(
                              column(12,
-                                    h2("What is Point Pattern Analysis and Network Constrained Point Pattern Analysis?"),
+                                    h2("What is First-order Spatial Point Patterns Analysis and Hot Spot and Cold Spot Area Analysis (HCSA)?"),
                                     hr(),
                                     uiOutput("ppancppa")),
                            ),
                            fluidRow(
                              column(12,
-                                    h2("About Spatial Bros"),
+                                    h2("About RecycleSG"),
                                     hr(),
                                     uiOutput("aboutus")),
                            )
@@ -108,14 +109,14 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                   ),
         
                   # 3rd Tab
-                  tabPanel("KDE Analysis",
-                           titlePanel("Network Constrained Point Pattern Analysis"),
+                  tabPanel("First-order Spatial Point Patterns Analysis",
+                           titlePanel("First-order Spatial Point Patterns Analysis"),
                            hr(),
                            tabsetPanel(type = "tabs",
                                        tabPanel("Introduction",
                                                 fluidRow(
                                                   column(6,
-                                                         h2("Welcome to the Network Constrained Point Pattern Analysis!"),
+                                                         h2("Welcome to the First-order Spatial Point Patterns Analysis!"),
                                                          hr(),
                                                          uiOutput("introductiondescription")                         
                                                          
@@ -125,23 +126,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                          imageOutput("introductionKernel")),
                                                 ),
                                        ),  
-                                       #tabPanel("Bin Location Points",
-                                        #        sidebarLayout(
-                                         #         mainPanel(
-                                          #          tmapOutput("mapPlot", width = "100%", height = "700"),
-                                           #       ),
-                                            #      sidebarPanel(
-                                             #       shinyjs::useShinyjs(),
-                                              #      h4("Bin Location Points"),
-                                               #     h5("Select the type of bin to be displayed on the map"),
-                                                #    selectInput(inputId = "bin_type",
-                                                 #               label = "Select Bin Type",
-                                                  #              choices = unique(binlocation$`Type of Bin Placed`)),
-                                                  #),
-                                                  
-                                                #),
-                                                
-                                       #),
+                                   
                                        tabPanel("Kernel Density Estimation", 
                                                 sidebarLayout(
                                                   mainPanel(
@@ -180,62 +165,52 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                        tabPanel("Network Constrained KDE (NetKDE) Analysis", 
                                                 sidebarLayout(
                                                   mainPanel(
-                                                    h3("Road Bin Plot"),
-                                                    tmapOutput("roadBinPlot", width = "100%", height = "350"),
-                                                    br(),
                                                     h3("NetKDE Plot"),
-                                                    tmapOutput("networkPlot", width = "100%", height = "350") # Second map plot
+                                                    tmapOutput("roadBinPlot", width = "100%", height = "700")
                                                   ),
                                                   sidebarPanel(
                                                     shinyjs::useShinyjs(),
                                                     h4("Network Constrained KDE Analysis"),
+                                                    h5("Select the type of bin to be displayed on the map"),
+                                                    selectInput(inputId = "bin_type_ws",
+                                                                label = "Select Type of Bin",
+                                                                choices = list("Blue Bins" = "Blue Bins",
+                                                                               "E-Waste Bins" = "E-Waste Bins")),
                                                     h5("Select the area to perform the analysis"),
                                                     selectInput(inputId = "area",
                                                                 label = "Select Area",
-                                                                choices = list("MUSEUM",
+                                                                choices = list(#"SINGAPORE RIVER",
+                                                                               #"MUSEUM",
                                                                                "MARINE PARADE",
                                                                                "DOWNTOWN CORE",
                                                                                "QUEENSTOWN",
                                                                                "OUTRAM",
-                                                                               #"KALLANG",
+                                                                               "KALLANG",
                                                                                "TANGLIN",
-                                                                               "NEWTON",
-                                                                               #"CLEMENTI",
-                                                                               "ORCHARD",
+                                                                               #"NEWTON",
+                                                                               "CLEMENTI",
+                                                                               #"ORCHARD",
                                                                                "GEYLANG",
-                                                                               #"NOVENA",
+                                                                               "NOVENA",
                                                                                "BUKIT TIMAH",
                                                                                "TOA PAYOH",
-                                                                               #"JURONG WEST",
-                                                                               #"SERANGOON",
-                                                                               #"BISHAN",
-                                                                               #"TAMPINES",
+                                                                               "JURONG WEST",
+                                                                               "SERANGOON",
+                                                                               "BISHAN",
+                                                                               "TAMPINES",
                                                                                "BUKIT BATOK",
-                                                                               #"HOUGANG",
-                                                                               #"ANG MO KIO",
-                                                                               #"BUKIT PANJANG",
-                                                                               "SUNGEI KADUT",
+                                                                               "HOUGANG",
+                                                                               "ANG MO KIO",
+                                                                               "BUKIT PANJANG",
+                                                                               #"SUNGEI KADUT",
                                                                                "YISHUN",
                                                                                "PUNGGOL",
-                                                                               #"CHOA CHU KANG",
-                                                                               #"SENGKANG",
+                                                                               "CHOA CHU KANG",
+                                                                               "SENGKANG",
                                                                                #"CENTRAL WATER CATCHMENT",
-                                                                               "SEMBAWANG"
-                                                                               #"WOODLANDS"
-                                                                )),
-                                                    sliderInput("lixelSize", "Lixel Size:", min = 100, max = 1000, value = 700),
-                                                    sliderInput("mindist", "Minimum Distance:", min = 100, max = 1000, value = 350),
-                                                    selectInput(inputId = "kernelName",
-                                                                label = "Choose the kernel to be used:",
-                                                                choices = list("Quartic" = "quartic",
-                                                                               "Triangle" = "triangle",
-                                                                               "Epanechnikov" = "epanechnikov",
-                                                                               "Gaussian" = "gaussian",
-                                                                               "Scaled Gaussian" = "scaled_gaussian",
-                                                                               "Tricube" = "tricube",
-                                                                               "Cosine" = "cosine",
-                                                                               "Triweight" = "triweight",
-                                                                               "Uniform" = "uniform"))
+                                                                               "SEMBAWANG",
+                                                                               "WOODLANDS"
+                                                                ))
                                                   )
                                                 ),
                                                 uiOutput("netStatsExplainerp1"),
@@ -246,7 +221,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                            
                   ),
                   # 4th Tab
-                  tabPanel("Hotspot Analysis",
+                  tabPanel("Hot Spot and Cold Spot Area Analysis (HCSA)",
                            titlePanel("Hot Spot and Cold Spot Area Analysis (HCSA)"),
                            tabsetPanel(type = "tabs",
                                        tabPanel("Introduction",
@@ -296,7 +271,7 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                        )
                            )
                   )
-)
+    )
 )
 
 
@@ -304,18 +279,6 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
 server <- function(input, output, session) {
   id <- NULL
   tmap_options(check.and.fix = TRUE)
-  
-  #output$mapPlot <- renderTmap({
-    # Filter binlocation data based on selected bin type
-    #filtered_binlocation <- binlocation %>%
-     # filter(`Type of Bin Placed` == input$bin_type)
-    
-    # Plot map with filtered binlocation data
-   # tm_shape(mpsz) +
-    #  tm_polygons() +
-    #  tm_shape(filtered_binlocation) +
-    #  tm_dots()
-  #})
   
   output$edamap <- renderTmap({
     # Set pop data equals read csv
@@ -401,7 +364,6 @@ server <- function(input, output, session) {
     
     map <- map +
       tm_view(set.view = 11, set.zoom.limits = c(11,15))
-
   })
   
   output$kdePlot <- renderTmap({
@@ -416,7 +378,8 @@ server <- function(input, output, session) {
     # Create ppp object
     bin_ppp <- as(bin_sp, "ppp")
     binSG_ppp <- bin_ppp[sg_owin] 
-    bin_ppp.km <- rescale(binSG_ppp, 1, "km") # set to 1000 for working legend
+    bin_ppp.km <- rescale(binSG_ppp, 1000, "km") # set to 1000 for working legend
+    bin_ppp.1 <- rescale(binSG_ppp, 1, "km") # set to 1000 for working legend
     
     if(input$bandwidth_type == "Adaptive Bandwidth"){
       shinyjs::hide("bandwidth_name")
@@ -427,11 +390,15 @@ server <- function(input, output, session) {
       shinyjs::hide("kernel_header")
       
       kde_origin_adaptive <- adaptive.density(bin_ppp.km, method="kernel")
+      kde_origin_adaptive1 <- adaptive.density(bin_ppp.1, method="kernel")
       
       # Convert to raster
       gridded_kde_origin_adaptive <- as.SpatialGridDataFrame.im(kde_origin_adaptive)
+      gridded_kde_origin_adaptive1 <- as.SpatialGridDataFrame.im(kde_origin_adaptive1)
       kde_raster <- raster(gridded_kde_origin_adaptive)
+      kde_raster1 <- raster(gridded_kde_origin_adaptive1)
       projection(kde_raster) <- CRS("+init=EPSG:3414")
+      projection(kde_raster1) <- CRS("+init=EPSG:3414")
       
     }
     else{
@@ -468,29 +435,38 @@ server <- function(input, output, session) {
                             edge = TRUE,
                             kernel = bw_method)
       
+      kde_bin_bw1 <- density(bin_ppp.1,
+                             sigma = bw_sigma, 
+                             edge = TRUE,
+                             kernel = bw_method)
+      
       # Convert to raster
       gridded_kde_bin_bw <- as.SpatialGridDataFrame.im(kde_bin_bw)
+      gridded_kde_bin_bw1 <- as.SpatialGridDataFrame.im(kde_bin_bw1)
       kde_raster <- raster(gridded_kde_bin_bw)
+      kde_raster1 <- raster(gridded_kde_bin_bw1)
       projection(kde_raster) <- CRS("+init=EPSG:3414")
+      projection(kde_raster1) <- CRS("+init=EPSG:3414")
     }
     
     # Plot KDE contours on top of polygons
     tmap_mode("plot")
     tm_shape(kde_raster) +
       tm_raster(style = "cont", palette = "plasma") +
-      tm_layout(legend.outside = TRUE, legend.show = TRUE, legend.text.color = "white")+
-      tm_view(set.view = 11, set.zoom.limits = c(11,15))
+      tm_shape(kde_raster1) +
+      tm_raster(style = "cont", palette = "plasma",legend.show = FALSE) +
+      tm_view(set.view = 11, set.zoom.limits = c(11,15))+
+      tm_layout(legend.show = FALSE)
   })
   
-  
-  
   output$roadBinPlot <- renderTmap({
-    # Debugging: Print selected area
-    #print(input$area)
-    
-    # Get selected lixel size and minimum distance
-    lixel_size <- input$lixelSize
-    min_dist <- input$mindist
+    if (input$bin_type_ws == "Blue Bins"){
+      binlocation <- st_read(dsn = "Data/gov", layer = "RECYCLINGBINS") %>%
+        st_transform(crs = 3414)
+    }
+    else{
+      binlocation <- readRDS("Data/alba/ewbins.rds")
+    }
     
     # Filter mpsz based on selected area
     filtered_mpsz <- mpsz %>%
@@ -499,36 +475,26 @@ server <- function(input, output, session) {
       st_make_valid() %>%
       st_transform(crs = 3414)
     
-    # Debugging: Print filtered mpsz
-    #print(filtered_mpsz)
-    
     # Perform intersection with roads_in_singapore based on selected area
     intersection_roads <- st_intersection(roads_in_singapore, filtered_mpsz)
-    
-    # Debugging: Print intersection_roads
-    #print(intersection_roads)
     
     # Filter out POINT geometries
     filtered_roads <- intersection_roads[st_geometry_type(intersection_roads) != "POINT", ]
     
-    # Debugging: Print filtered_roads
-    #print(filtered_roads)
-    
     # Cast non-POINT geometries to LINESTRINGs
     casted_roads <- st_cast(filtered_roads, "LINESTRING")
     
-    # Debugging: Print casted_roads
-    #print(casted_roads)
-    
     # Lixelize roads
-    #lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
-    lixels <- lixelize_lines(casted_roads, lixel_size, mindist = min_dist)
+    lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
+    #lixels <- lixelize_lines(casted_roads, lixel_size, mindist = min_dist)
     
     # Extract samples
     samples <- lines_center(lixels)
     
     # Intersect with bin locations
     origin <- st_intersection(binlocation, filtered_mpsz)
+    
+    print(origin)
     
     # Plot the map
     tmap_mode('view')
@@ -536,109 +502,6 @@ server <- function(input, output, session) {
       tm_shape(casted_roads) +
       tm_lines(col = "red") +
       tm_shape(origin) + 
-      tm_dots()
-  })
-  
-  output$networkPlot <- renderTmap({
-    # Debugging: Print selected area
-    print(input$area)
-    
-    # Get selected lixel size and minimum distance
-    lixel_size <- input$lixelSize
-    min_dist <- input$mindist
-    
-    # Get selected kernel name from input
-    kernel_name <- input$kernelName
-    print(kernel_name)
-    
-    # Define bandwidth using selected kernel
-    bw_method <- switch(kernel_name,
-                        "quartic" = "quartic",
-                        "triangle" = "triangle",
-                        "epanechnikov" = "epanechnikov",
-                        "gaussian" = "gaussian",
-                        "scaled_gaussian" = "scaled gaussian",
-                        "tricube" = "tricube",
-                        "cosine" = "cosine",
-                        "triweight" = "triweight",
-                        "uniform" = "uniform")  # Default to gaussian if unknown kernel
-    
-    # Filter mpsz based on selected area
-    filtered_mpsz <- mpsz %>%
-      filter(PLN_AREA_N == input$area) %>%
-      st_union() %>%
-      st_make_valid() %>%
-      st_transform(crs = 3414)
-    
-    # Debugging: Print filtered mpsz
-    #print(filtered_mpsz)
-    
-    # Perform intersection with roads_in_singapore based on selected area
-    intersection_roads <- st_intersection(roads_in_singapore, filtered_mpsz)
-    
-    # Debugging: Print intersection_roads
-    #print(intersection_roads)
-    
-    # Filter out POINT geometries
-    filtered_roads <- intersection_roads[st_geometry_type(intersection_roads) != "POINT", ]
-    
-    # Debugging: Print filtered_roads
-    #print(filtered_roads)
-    
-    # Cast non-POINT geometries to LINESTRINGs
-    casted_roads <- st_cast(filtered_roads, "LINESTRING")
-    
-    # Debugging: Print casted_roads
-    #print(casted_roads)
-    
-    # Lixelize roads
-    #lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
-    #print(lixels)
-    lixels <- lixelize_lines(casted_roads, lixel_size, mindist = min_dist)
-    
-    # Extract samples
-    samples <- lines_center(lixels)
-    #print(samples)
-    
-    # Intersect with bin locations
-    origin <- st_intersection(binlocation, filtered_mpsz)
-    #print(origin)
-    
-    #print(identical(names(xd.small[[1]]), names(xd.small[[2]]) ))
-    print(colnames(casted_roads))
-    print(colnames(origin))
-
-    # Compute network kernel
-    densitiesMe <- nkde(casted_roads, 
-                           events = origin,
-                           #events = rename(origin, x = geometry), 
-                           w = rep(1,nrow(origin)),
-                           samples = samples,
-                           kernel_name = bw_method,
-                           bw = 300, 
-                           div= "bw", 
-                           method = "simple", 
-                           digits = 1, 
-                           tol = 1,
-                           grid_shape = c(1,1), 
-                           max_depth = 8,
-                           agg = 5, #we aggregate events within a 5m radius (faster calculation)
-                           sparse = TRUE,
-                           verbose = FALSE)
-    
-    # Create a dataframe for the densities
-    samples$density <- densitiesMe
-    lixels$density <- densitiesMe
-    
-    # rescaling to help the mapping
-    samples$density <- samples$density*1000
-    lixels$density <- lixels$density*1000
-    
-    # Plot the map
-    tmap_mode('plot')
-    tm_shape(lixels)+
-      tm_lines(col="density")+
-      tm_shape(origin)+
       tm_dots()
   })
   
@@ -731,277 +594,89 @@ server <- function(input, output, session) {
   })
   
   
-  
-  
-  
   # Home page UI
-  output$projectMotivation <- renderUI(HTML("<h4> In today’s technological advancing world, there are many useful and interesting spatial data sources that exist in the forms of Geospatial and Aspatial format. Geographical Geospatial data sets the foundation based on the geographical boundary locations and the Aspatial data are the records of observation that can be further prepared to be used to derive meaningful insights. 
-                                              </h4> 
-                                              <h4>Despite all the data sources out on the interweb, there are not many people who are knowledgeable and trained to perform such analysis. Without the fundamental knowledge and training involved, any results based on the analysis performed could result in inaccuracies.
-                          Our group attempt is to mainly focus on performing analysis and develop a website based geographical spatial tool. R Shiny tool will be used with regards to developing the 1st/2nd Order & Network Constrained Point Pattern Analysis of Melbourne City, Australia.<h4>"))
+  output$myList <- renderUI(HTML(paste0("<h4>A Group Project done by<h4>
+                                   <ul>
+                                     <li><a href='https://www.linkedin.com/in/wan-shen-lim-8b9827163'>Lim Wan Shen</a></li>
+                                     <li><a href='https://www.linkedin.com/in/jinyuan-low/'>Low Jin Yuan</a></li>
+                                   </ul>
+                                   <br>
+                                   <p> Access our user guide <a href = 'https://is415-gaa-jkw.netlify.app/'>here</a></p>
+                                   <br>
+                                   <p> This project is for IS415 Geospatial Analytics & Application. </p>
+                                   <img src = 'smulogo.png' width = 90%, height = 90%>")))
   
-  output$ppancppa <- renderUI(HTML("<h4> Point Pattern Analysis methods helps provide insights about where things occur, how the distribution of incidents or the arrangement of data aligns with other features in the landscape, and what the patterns may reveal about potential connections and correlations. <h4>
-                                     <h4> Network constrained Spatial Point Patterns Analysis (NetSPAA) is a collection of spatial point patterns analysis methods special developed for analysing spatial point event occurs on or alongside network. The spatial point event can be locations of childcare centre for example. The network, on the other hand can be a road network or river network. <h4>"))
+  output$projectMotivation <- renderUI(HTML("<h4>In our ever-evolving technological landscape, a wealth of spatial data sources, both Geospatial and Aspatial, offer a treasure trove of insights waiting to be unearthed. Geospatial data, anchored in geographical boundaries, serves as the bedrock upon which our analyses are built, while Aspatial data records observations ripe for deeper examination and interpretation. Despite the abundance of these data streams available online, the expertise necessary to navigate and extract meaningful insights remains a rare commodity. Without the requisite knowledge and training, analyses run the risk of being marred by inaccuracies and misinterpretations.</h4>
+                                              <h4>It is within this context that our group endeavors to carve a niche, focusing on conducting meticulous analyses and crafting a user-friendly website-based geographical spatial tool. Harnessing the power of the R Shiny framework, we aim to develop robust tools tailored specifically for our Case Study on Singapore’s Recycling Bin Distribution, encompassing First-order Spatial Point Patterns Analysis and Hot Spot and Cold Spot Area Analysis, thereby facilitating a deeper understanding of spatial distribution dynamics in urban environments.</h4>
+                                                <h4>As urbanization accelerates globally, effective waste management becomes paramount to maintain environmental sustainability and public health. Singapore, a densely populated city-state, faces significant waste management challenges. While initiatives like recycling have been implemented, optimizing the distribution of recycling bins remains crucial for maximizing participation and minimizing waste diversion. Geospatial analytics offer a powerful tool set to analyze spatial data, optimize resource allocation, and enhance waste management strategies.
+                                                  Under Singapore’s Zero Waste Masterplan and the Singapore Green Plan, Singapore aims to increase its overall recycling rate to 70 per cent by 2030. Achieving this ambitious goal necessitates a comprehensive assessment of the existing recycling infrastructure and targeted interventions to address any gaps in distribution.</h4>"))
   
-  output$aboutus <- renderUI(HTML("<h4> Spatial Bros is created to assist non technologically savvy users in performing geographical point pattern 
-                             analysis. This application aims to assist users in 2 types of analysis, particularly in performing 1st/2nd Order & Network Constrained Spatial Point 
-                             Pattern Analysis. For each of the analyses, the application will provide users with statistical functions, kernel density heat map estimation, various mappings and G&K function results. 
-                             The application will cover an array of spatial points located in Melbourne City such as childcare centres, business establishments, famous landmarks including places of interest such as schools, theaters, health service, 
-                             sports facilities, drinking fountains and public toilets. The spatial points will work in conjunction to cover areas of the city’s road, pedestrian and tram network. From this application, users would be able to perform types 
-                             of hypothesis testing that allow them to generate insights towards their conclusion on the distribution along the spatial points along the network. </h4>"))
-  
-  output$netKDEExpaliner <- renderUI(HTML("
-                                            <h3>Network Kernel Density Estimation Map</h3>
-                                            <hr>
-                                            <p>Network Constrained Spatial Point Pattern Analysis analyses point pattern events that happens alongside a network. We provide several point pattern (such as Business Establishment, Drinking Fountains) and Network (such as Pedestrian or Road) options to explore the effects of spatial point patterns and densities surrounding networks. These could be used to investigate the density of point patterns along networks, such as the amount of drinking fountains along pedestrian rotues to inform the planning and installing of more drinking fountains.</p>
-                                            <h3> To begin your analysis, you can start by </h3>
-                                            <ol>
-                                              <li>Select your choice of locality</li>
-                                              <li>Select your choice of network</li>
-                                              <li>Select your location of interest and subcategories/theme if required</li>
-                                              <li>Select your lixel length - we recommend you to start with 500 metres</li>
-                                              <li>Select your minimum lixel length - we recommend you to start with 250 metres</li>
-                                              <li>Select your kernel of choice</li>
-                                              <li>Select your method of choice</li>
-                                              <li>Click on 'Generate KDE Map' and you are ready to go!</li>
-                                            </ol>
-                                            <hr>
-                                            <h3>Interpeting the Results</h3>
-                                            <hr>
-                                            <img src='nkde_example.png' height='400'>
-                                            <br>
-                                            <p> A legend will be shown at the top right side of the map. The colour shade intensity of the network will get darker if there is a higher relative density of spatial points specified (location of interest).</p>
-                                            <p> On contrary, if the colour shade intensity of the network is lighter, it represents a lower relative density alongside the network</p>
-                                            <p> The 'NetKDE Bandwidth Selection' tells us what bandwidth has been selected by the algorithm for bandwidth range between 100 and 900, in steps of 20. The goal is to find the highest possible Cross Validation (CV) score. The larger the bandwidth, the increased amount of smoothing, hence, the CV score has been capped at 900 to reduce the amount of detail lost.
-                                            <h3>Key Function FAQ</h3>
-                                            <hr>
-                                            <h4>Lixels</h4>
-                                            <img src='nKDElixels.png' height='300'>
-                                            <p>Image credit to <a href='https://jeremygelb.github.io/spNetwork/articles/NKDE.html'>spNetwork</a></p>
-                                            <p>Lixels are point samples along existing network lines to calculate the density of points near the region. 'Length of Lixel' defines the typical length between such point and 'Min. Lixel Length' defines the minimum if the typical length cannot be fufilled.</p>
-                                            <h4>Kernel Density Estimation Methods</h4>
-                                            <p>An inforgraphic has been prepared below:</p>
-                                            <img src='KernelDensity.png' width='50%'>
-                                                                                  "))
-  output$netStatsExplainerp1 <- renderUI(HTML("
-    <h3> Statistical Functions - G & K </h3>
-    <hr>
-    <img src='gkpicture.png' height='300'>
-    <p>The K-function is a method used in spatial Point Pattern Analysis (PPA) to inspect the spatial distribution of a set of points. It allows the user to assess if the set of points is more or less clustered that what we could expect from a given distribution. </p>
-    <p> Most of the time, the set of point is compared with a random distribution.
-    The empirical K-function for a specified radius r is calculated with the following formula listed <a href ='https://cran.r-project.org/web/packages/spNetwork/vignettes/KNetworkFunctions.html'> here </a> </p>
-    <p> Basically, the K-function calculates for a radius r the proportion of cells with a value below r in the distance matrix between all the points Dij. In other words, the K-function estimates the average number of neighbours of a typical random point </p>
-    <p> A modified version of the K-function is the G-function (Pair Correlation Function). The regular K-function is calculated for subsequent disks with increasing radii and thus is cumulative in nature. The G-function uses rings instead of disks and permits the analysis of the points concentrations at different geographical scales. </p>"))
-  
-  
-  output$netStatsExplainerp2 <- renderUI(HTML("<h3> To begin your analysis, you can start by:</h3>
-    <ol>
-      <li>Select your choice of network</li>
-      <li>Select your location of interest</li>
-      <li>Select your start value in (metres). We will recommend you to start with 0 to begin.</li>
-      <li>Select your end value in (metres). We will recommend you to end with 500 metres to begin.</li>
-      <li>Select your number of simulations. We will recommend you to start with 50 simulations to begin.</li>
-      <li>Select your aggregate value. We will recommend you to start with 0 to begin.</li>
-      <li>Click on 'Generate Statistical Results' and you are ready to go!</li>
-    </ol>
-    <h3>Interpreting the Results</h3>
-    <hr>
-    <img src='g&kexample.png' height='600'>
-        <br>
-    <p>Observed values - Black Line</p>
+  output$ppancppa <- renderUI(HTML("<h2>First-order Spatial Point Patterns Analysis</h2>
+<h4>First-order Spatial Point Patterns Analysis refers to the examination and characterization of the spatial distribution of point features within a study area without considering the influence of other point patterns. It involves analyzing the arrangement of individual point locations to identify patterns such as clustering, dispersion, or randomness. Common techniques used in first-order spatial point pattern analysis include Ripley's K-function, nearest neighbor analysis, and quadrat analysis. This analysis provides fundamental insights into the underlying spatial processes and can aid in understanding the drivers behind point pattern distributions.</h4>
 
-    <p>Upper plot - K function, lower plot - G function, the plot is interactive, you may mouse over at various points in the graph to inspect the exact values </p>
-    <p>Hypothesis:</p>
-    <p>H0: The distribution of spatial points are randomly distributed</p>
-    <p>H1: The distribution of spatial points are not randomly distributed</p>
-    <br>
-    <p> The grey area represents the function ‘envelope’. The ‘blue’ line represents the empirical function value </p>
-    <p> In the event if the observed value is above the envelope, we can reject the null hypothesis (H0) as the value is statistically significant. We can conclude that the spatial points resemble a <b>clustered distribution<b?</p>
-    <p> In the event if the observed value is below the envelope, we can reject the null hypothesis (H0) as the value is statistically significant. We can conclude that the spatial points resemble a <b>dispersed distribution</b> </p>
-    <p> On contrary, if the observed value is inside the envelope, we cannot reject the null hypothesis (H1) as the value is not statistically significant. We can conclude the spatial points resemble a <b>random distribution</b></p>
-    <p> Note: the distances relates to the distance at which the spatial points exhibits a certain pattern</p>
-    <h3>Key Function FAQ</h3>
+<h2>Hot Spot and Cold Spot Area Analysis (HCSA)</h2>
+<h4>Hot Spot and Cold Spot Area Analysis (HCSA), also known as hotspot analysis or spatial clustering analysis, is a method used to identify statistically significant clusters of high or low values within a spatial dataset. It involves identifying areas where the observed values are significantly different from what would be expected under a random spatial distribution. Hot spots represent areas with high values (e.g., high population density, high crime rates), while cold spots represent areas with low values. HCSA techniques often involve the application of statistical tests, such as the Getis-Ord Gi* statistic or the Moran's I statistic, to assess the significance of identified clusters. This analysis helps in identifying spatial patterns, trends, and areas of interest, which can be valuable for decision-making, resource allocation, and targeted interventions in various fields including public health, urban planning, and environmental management.</h4>"))
+  
+  output$aboutus <- renderUI(HTML("<h4> RecycleSG has been developed to support users, particularly those with limited technological expertise, in conducting geographical point pattern analysis within the context of Singapore's recycling bin distribution. This application is designed to aid users in two main types of analysis, focusing specifically on First Order Spatial Point Pattern Analysis as well as Hot Spot and Cold Spot Area Analysis (HCSA). Each analysis provided by the application includes statistical functions, kernel density estimation, and various mapping functionalities. </h4>
+                                  <h4> Our project focuses on leveraging geospatial analytics to optimize recycling bin placement and management in Singapore urban areas. By analysing spatial data, we aim to identify optimal locations for recycling bins, improve waste management efficiency, and promote sustainability. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University. </h4>"))
+  
+  output$netKDEExpaliner <- renderUI(HTML("<h3>Kernel Density Estimation Map</h3>
+                                            <hr>
+<p>Kernel density estimation (KDE) serves as a powerful spatial analysis technique, enabling the calculation of point feature densities across an area. By employing a mathematical kernel function, KDE transforms discrete point data into a continuous surface or 'heat map,' effectively visualizing spatial distribution patterns.</p>
+
+<p>In the presented visualization, the shaded areas, ranging from hues of blue to red, depict varying density levels derived from KDE analysis. Darker shades of blue signify heightened concentrations of the underlying point data, while lighter hues indicate lower densities. Notably, areas characterized by deep red or purple hues denote dense clusters, potentially corresponding to urban centers, population hubs, or focal points of measured phenomena such as incidents, facilities, or resources. Specifically, in the depicted chart, darker red/purple areas highlight a pronounced density or concentration of recycling bins within the region.</p>
+
+<p>The adaptive bandwidth KDE analysis represents an evolution of traditional KDE methods. By dynamically adjusting the bandwidth size based on local point density, this approach offers a more refined depiction of spatial patterns. Unlike fixed bandwidth methods, which may oversmooth areas of high density and undersmooth regions with low density, the adaptive bandwidth approach adapts to local variations. Consequently, it accurately captures nuances in the spatial distribution, enhancing the interpretability of results.</p>
+
+<p>Overall, the output of KDE analysis furnishes an intuitive platform for exploring significant density hotspots, gradients, and spatial trends within the study area. Leveraging the input point data, this visualization facilitates the identification of key spatial patterns, thereby informing decision-making processes across a spectrum of domains, from urban planning to resource allocation and beyond.</p>"))
+  
+  output$netStatsExplainerp1 <- renderUI(HTML("
+    <h3> NetKDE Analysis </h3>
     <hr>
-    <h4>Start/End</h4>
-    <p>Distances for statistical analysis to be run and plotted</p>
-    <h4>Number of Simulations</h4>
-    <p>How many simulations to run the statistical analysis. The more simulations, the more accurate the results will be.</p>
-    <h4>Aggregate Value</h4>
-    <p>Points within that radius will be aggregated (in metres)</p>
-    <p>o - Null (no aggregation) | >0 - Aggregation of points</p>
-                                                "))
+    <p>NetKDE analysis is a spatial analysis technique used to study the distribution patterns of point features (like the recycling bin locations represented by black dots) in relation to an underlying constraining network (in this case, the street network).</p>
+
+<p>The key aspects shown in the image relevant to NetKDE Analysis are:</p>
+
+<ul>
+  <li>Point data: The black dot symbols indicate the locations of recycling bins across the study area. These serve as the point features whose spatial pattern will be analyzed.</li>
+  <li>Network dataset: The map displays the street network of the downtown core, providing the linear network constraints that the point pattern analysis must account for. Real-world accessibility and movement are limited by this transportation network.</li>
+</ul>
+
+<p>By performing NetKDE analysis on the recycling bin locations constrained by the street network geometry, analysts can assess if the point patterns exhibit clustering, dispersal, or random characteristics along the network paths. This contrasts traditional spatial point pattern analysis that considers Euclidean straight-line distances.</p>
+
+<p>Based on the chart depicted above, there are two different types of bins: the blue bins and the e-waste bins. Based on the observation, we can infer that the blue bins are more clustered compared to the e-waste bins. Therefore, it is likely that the blue bins serve a more generalized waste collection purpose, while the e-waste bins may be strategically placed at specific locations catering to the disposal of electronic waste materials.</p>
+
+<p>NetKDE analysis results can reveal insightful patterns, such as bins clustered around certain road segments or network nodes (intersections), which could inform optimized redistribution plans adhering to the network connectivity. Overall, it enables studying recycling bin accessibility while realistically incorporating the network constraints of the urban environment.</p>"))
   
   output$introductiondescription <- renderUI(HTML(
-    "<h4> You will be able to perform network constrained spatial point patterns analysis methods special developed for analysing spatial point event occurs on or alongside network for City of Melbourne, Australia! </h4>
+    "<h4> You will be able to perform first-order spatial point patterns analysis for analysing spatial point event occurs on or alongside network for Singapore. </h4>
     <h4> There are 2 types of analysis that you can perform</h4>
       <ol> 
-        <li> Network Kernel Density Estimation </li>
-        <li> G & K Function Analysis </li>
+        <li> Kernel Density Estimation </li>
+        <li> Network Constrained KDE (NetKDE) Analysis </li>
       </ol>
     <h4> For each of the analysis, we offer you the options of selecting </h4>
       <ol> 
-        <li> Road Network </li>
-        <li> Pedestrian Network </li>
-        <li> Tram Network </li>
-      </ol>
-    <h4> In addition you are allowed to pick your location of interest such as</h4>
-      <ol> 
-        <li> Childcare Centres </li>
-        <li> Business Establishments </li>
-        <li> Drinking Fountains </li>
-        <li> Landmarks </li>
-        <li> Public Toilets </li>
+        <li> Bandwidth Type </li>
+        <li> Bin Type </li>
+        <li> Area of Singapore </li>
       </ol>
     <h3> Benefits of performing Network Constrained Point Pattern Analysis </h3>
     <hr>
-        <ol> 
-          <li> Accurate analysis: Network Constrained Point Pattern Analysis provides more accurate results compared to traditional point pattern analysis because it accounts for the underlying transportation network. This is particularly important in areas where the transportation network is dense and complex. </li> <br>
-          <li> Better decision-making: Network Constrained Point Pattern Analysis can provide insights into how the network infrastructure affects the spatial distribution of points, which can be valuable for decision-making related to urban planning, transportation planning, and public policy </li> <br>
-          <li> Improved resource allocation: Network Constrained Point Pattern Analysis can help optimize the allocation of resources, such as improving the accessibility to more drinking fountains/public toilets, by identifying areas with high concentrations of points and areas that are more accessible by the transportation network. </li>
-      </ol>
-"))
-  
-  output$IntroData <- renderUI(HTML(
-    "<h3> Welcome to Data Exploration</h3>
-      <hr>
-      <p> Here, you can explore the network and spatial point datasets in the City of Melbourne included in the interaction application.</p>
-      <h3>Included datasets</h3>
-      <hr>
-      <h4>Network</h4>
-      <ul>
-        <li>Road Network - City of Melbourne</li>
-        <li>Pedestrian Network - City of Melbourne</li>
-        <li>Tram Network - City of Melbourne</li>
-      </ul>
-      <h4>Spatial Points</h4>
-      <ul>
-        <li>Childcare Centres</li>
-        <li>Business Establishments - Sub-categories by Industry Name</li>  
-        <li>Drinking Fountains</li>
-        <li>Landmarks - Themes</li>
-        <li>Public Toilets</li>
-      </ul>
-      <h3> To start off:</h3>
-      <hr>
-    <ol>
-      <li>Select the Network / Spatial Points tab to explore network or spatial points</li>
-      <li>Select the localities</li>
-      <li>Select the location of interest and any specific themes or sub-categories if necessary</li>
-      <li>Click on 'Generate Map and Data Table' and you are ready to go!</li>
-    </ol>
-                                                "))    
-  
-  output$introkde <- renderUI(HTML(
-    "<h4> You will be able to perform spatial point patterns analysis methods special developed for analysing spatial point event occurs on or alongside network for City of Melbourne, Australia! </h4>
-    <p> There are 2 types of analysis that you can perform </p>
-      <ol> 
-        <li> Kernel Density Estimation </li>
-        <li> G & K Function Analysis </li>
-      </ol>
-    <p> For each of the analysis, we offer you the options of selecting </p>
-      <ol> 
-        <li> Childcare Centres </li>
-        <li> Business Establishments </li>
-        <li> Drinking Fountains </li>
-        <li> Landmarks </li>
-        <li> Public Toilets </li>
-      </ol>
-    <h3> Benefits of performing Spatial Point Pattern Analysis </h3>
-    <hr>
-    <p> 
-        <ol> 
-          <li>Statistical benefits: Spatial Point Pattern Analysis helps to identify and statistically conclude the underlying spatial patterns in data and detect clustering or disperson of points over traditional point pattern analysis. </li> <br>
-          <li> Better decision-making: Spatial Point Pattern Analysis can provide insights of the spatial distribution of points, which can be valuable for decision-making related to urban planning, and public policy </li> <br>
-      </ol>
-    </p>"))
-  
-  
-  output$KDEstats <- renderUI(HTML("
-    <h3>2nd Order Spatial Point Pattern Analysis and Statistical Functions - G & K </h3>
-    <hr>
-    <p>2nd Spatial Point Pattern Analysis analyses effects of interaction between point pattern events.</p>
-    <img src='gkpicture.png' height='300'>
-    <p>The G / K-function is a method used in spatial Point Pattern Analysis (PPA) to inspect the spatial distribution of a set of points. It allows the user to assess if the set of points is more or less clustered that what we could expect from a given distribution. </p>
-    <p> Most of the time, the set of point is compared with a random distribution.
-    The empirical K-function for a specified radius r is calculated with the following formula listed: <a href ='https://www.rdocumentation.org/packages/spatstat/versions/1.64-1/topics/Gest'> G Function </a> <a href ='https://www.rdocumentation.org/packages/spatstat/versions/1.64-1/topics/Kest'> K Function </a> </p>
-    <p> Basically, the K-function calculates for a radius r the proportion of cells with a value below r in the distance matrix between all the points Dij. In other words, the K-function estimates the average number of neighbours of a typical random point </p>
-    <p> A modified version of the K-function is the G-function (Pair Correlation Function). The regular K-function is calculated for subsequent disks with increasing radii and thus is cumulative in nature. The G-function uses rings instead of disks and permits the analysis of the points concentrations at different geographical scales. </p>
-      <ol>
-      <li>Select your location of interest</li>
-      <li>Select your start value in (metres). We will recommend you to start with 0 to begin.</li>
-      <li>Select your end value in (metres). We will recommend you to end with 500 metres to begin.</li>
-      <li>Select the confidence level to perfom the statistical testing.</li>
-      <li>Click on 'Generate Analysis' and you are ready to go!</li>
-    </ol>
-    <h3>Interpreting the Results</h3>
-    <hr>
-    <img src='gkKDEeg.png' height='600'>
-    <br>
-    <p>Observed values - Black Line</p>
-    <p>Upper plot - K function, lower plot - G function, the plot is interactive, you may mouse over at various points in the graph to inspect the exact values </p>
-    <p>Hypothesis:</p>
-    <p>H0: The distribution of spatial points are randomly distributed</p>
-    <p>H1: The distribution of spatial points are not randomly distributed</p>
-    <br>
-    <p> The grey area represents the function ‘envelope’. The ‘blue’ line represents the empirical function value </p>
-    <p> In the event if the observed value is above the envelope, we can reject the null hypothesis (H0) as the value is statistically significant. We can conclude that the spatial points resemble a <b>clustered distribution<b?</p>
-    <p> In the event if the observed value is below the envelope, we can reject the null hypothesis (H0) as the value is statistically significant. We can conclude that the spatial points resemble a <b>dispersed distribution</b> </p>
-    <p> On contrary, if the observed value is inside the envelope, we cannot reject the null hypothesis (H1) as the value is not statistically significant. We can conclude the spatial points resemble a <b>random distribution</b></p>
-    <p> Note: the distances relates to the distance at which the spatial points exhibits a certain pattern</p>
-    <h3>Key Function FAQ</h3>
-    <hr>
-    <h4>Start/End</h4>
-    <p>Distances for statistical analysis to be run and plotted</p>
-    <h4>Confidence Level</h4>
-    <p>How many simulations to run the statistical analysis. The number of simulations are mapped as follows: </p>
-    <p>95% - 39 | 99% - 199 | 99.9% - 1999</p>
-    <p>Given by the following formula: alpha = 2 * nrank / (1 + nsim) where nrank = 1</p>
-    <p>95% and 99% are typical confidence levels used</p> 
-                                     "))
-  
-  output$sppastuff <- renderUI(HTML("
-                                            <h3>Kernel Density Estimation Map and 1st Order Spatial Point Pattern Analysis</h3>
-                                            <hr>
-                                            <p>1st Spatial Point Pattern Analysis analyses point pattern events and its effects with the environment. We provide several point pattern (such as Business Establishment, Drinking Fountains) options to explore the effects of spatial point patterns and densities. These could be used to investigate the density of point patterns, such as the amount of drinking fountains to inform the planning and installing of more drinking fountains.</p>
-                                            <h3> To begin your analysis, you can start by </h3>
-                                            <ol>
-                                              <li>Select your choice of locality</li>
-                                              <li>Select your location of interest and subcategories/theme if required</li>
-                                              <li>Select your kernel of choice</li>
-                                              <li>Select your method of choice</li>
-                                              <li>Click on 'Generate KDE Map' and you are ready to go!</li>
-                                            </ol>
-                                            <h3>Interpeting the Results</h3>
-                                            <hr>
-                                            <img src='sppa.png' height='600'>
-                                            <br>
-                                            <p> A legend will be shown at the top right side of the map. The colour shade intensity of the network will get darker if there is a higher relative density of spatial points specified (location of interest).</p>
-                                            <p> On contrary, if the colour shade intensity of the network is lighter, it represents a lower relative density alongside the network</p>
-                                            <p> The 'Clark and Evans Test' is a nearest neighbour test to analyse and statistically conclude point pattern events and its effects with the environment.
-                                            <br>
-                                            <p>Hypothesis:</p>
-                                            <p>H0: The distribution of spatial points are randomly distributed</p>
-                                            <p>H1: The distribution of spatial points are not randomly distributed</p>
-                                            <br>
-                                            <p> If the p-value is less than the alpha of the confidence selected (ie. alpha will be 0.05 if confidence selected is 95%), we reject H0 (null hypothesis) that the spatial points are randomly distributed</p>
-                                            <p> If the p-value is more than the alpha of the confidence selected (ie. alpha will be 0.05 if confidence selected is 95%), we cannot reject H0 (null hypothesis) that the spatial points are randomly distributed</p>
-                                            <p> If H0 is rejected:</p>
-                                            <p> In the event if the R < 1, we We can conclude that the spatial points resemble a <b>clustered distribution<b?</p>
-                                            <p> In the event if the R > 1, we can conclude that the spatial points resemble a <b>dispersed distribution</b> </p>
-                                            <h3>Key Function FAQ</h3>
-                                            <hr>
-                                            <h4>Confidence Level</h4>
-                                            <p>How many simulations to run the statistical analysis. The number of simulations are mapped as follows: </p>
-                                            <p>95% - 39 | 99% - 199 | 99.9% - 1999</p>
-                                            <p>Given by the following formula: alpha = 2 * nrank / (1 + nsim) where nrank = 1</p>
-                                            <p>95% and 99% are typical confidence levels used</p> 
-                                            
-                                            <h4>Kernel Density Estimation Methods</h4>
-                                            <h5>Bandwidth Type</h5>
-                                            <p>Fixed: Appropriate bandwidth will be selected by algorithm to generate Kernel Density Estimate</p>
-                                            <p>Adaptive: Appropriate bandwidth will be selected by algorithm to generate Kernel Density Estimate. Adaptive kernel is suitable to provide a smoother estimate when dealing with varying spatial point distributions. An example could be urban vs rural typologies where urban may have more spatial points over rural.</p><br>
-                                            <img src='sppakernel.png' width='50%'>
-                                                                                  "))
+        <h4><b>Identification of Spatial Distribution</b></h2>
+        <p>First-order analysis helps identify the overall spatial distribution of point features within a study area. It provides insights into whether the points are clustered, dispersed, or randomly distributed, which is fundamental for understanding underlying spatial processes.</p>
+        
+        <h4><b>Quantification of Spatial Patterns</b></h2>
+        <p>Through statistical measures such as Ripley's K-function or nearest neighbor analysis, first-order analysis quantifies the degree of clustering or dispersion in point patterns. This allows for objective comparisons between different datasets or spatial patterns.</p>
+        
+        <h4><b>Detection of Spatial Trends</b></h2>
+        <p>First-order analysis can reveal spatial trends or gradients in point patterns across the study area. It helps identify areas with higher or lower densities of point features, providing valuable information for spatial planning, resource allocation, and decision-making.</p>
+        
+        <h4><b>Insights into Spatial Processes</b></h2>
+        <p>Understanding the spatial distribution and arrangement of point features is crucial for gaining insights into underlying spatial processes. First-order analysis provides a foundation for exploring spatial relationships, interactions, and dependencies among point features.</p>
+        
+        <h4><b>Decision Support</b></h2>
+        <p>Insights gained from first-order analysis support evidence-based decision-making in various domains. By understanding the spatial arrangement of point features, decision-makers can develop more effective strategies for resource allocation, land use planning, conservation efforts, and public health interventions.</p>"))
   
   output$introductionhcsa <- renderUI(HTML("
                                            <p>Welcome to an exploration of hotspot and coldspot analysis in Singapore's efforts towards better waste management, specifically focusing on the placement of recycling bins. In this guide, we aim to shed light on how this analytical approach helps optimize the locations of recycling bins across our city-state, ensuring that they are where they're needed most.</p><br>

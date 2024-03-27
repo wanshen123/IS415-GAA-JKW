@@ -1,0 +1,29 @@
+---
+title: "Get LatLon from Postal Code"
+---
+
+```{r}
+# Define Singaporean postal codes with "SG" suffix
+singapore_postal_codes <- c("038989", "238877", "188065")
+
+# Function to geocode using OpenStreetMap Nominatim API
+geocode_osm <- function(postal_codes) {
+  result <- lapply(postal_codes, function(code) {
+    url <- paste0("https://nominatim.openstreetmap.org/search?format=json&postalcode=", code)
+    data <- jsonlite::fromJSON(url)
+    if (length(data) > 0) {
+      return(data[1, c("lat", "lon")])
+    } else {
+      return(NA)
+    }
+  })
+  result <- do.call(rbind, result)
+  return(result)
+}
+
+# Geocode postal codes using OpenStreetMap Nominatim API
+geo_data_osm <- geocode_osm(singapore_postal_codes)
+
+# Print the geocoded data
+print(geo_data_osm)
+```
