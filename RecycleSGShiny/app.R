@@ -194,35 +194,48 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                                 label = "Select Area",
                                                                 choices = list("MUSEUM",
                                                                                "MARINE PARADE",
-                                                                               "DOWNTOWN CORE",
+                                                                               #"DOWNTOWN CORE",
                                                                                "QUEENSTOWN",
-                                                                               "OUTRAM",
+                                                                               #"OUTRAM",
                                                                                "KALLANG",
                                                                                "TANGLIN",
                                                                                "NEWTON",
-                                                                               "CLEMENTI",
+                                                                               #"CLEMENTI",
                                                                                "ORCHARD",
                                                                                "GEYLANG",
-                                                                               "NOVENA",
+                                                                               #"NOVENA",
                                                                                "BUKIT TIMAH",
                                                                                "TOA PAYOH",
-                                                                               "JURONG WEST",
-                                                                               "SERANGOON",
-                                                                               "BISHAN",
-                                                                               "TAMPINES",
+                                                                               #"JURONG WEST",
+                                                                               #"SERANGOON",
+                                                                               #"BISHAN",
+                                                                               #"TAMPINES",
                                                                                "BUKIT BATOK",
-                                                                               "HOUGANG",
-                                                                               "ANG MO KIO",
-                                                                               "BUKIT PANJANG",
+                                                                               #"HOUGANG",
+                                                                               #"ANG MO KIO",
+                                                                               #"BUKIT PANJANG",
                                                                                "SUNGEI KADUT",
                                                                                "YISHUN",
                                                                                "PUNGGOL",
-                                                                               "CHOA CHU KANG",
-                                                                               "SENGKANG",
-                                                                               "CENTRAL WATER CATCHMENT",
-                                                                               "SEMBAWANG",
-                                                                               "WOODLANDS"
-                                                                ))
+                                                                               #"CHOA CHU KANG",
+                                                                               #"SENGKANG",
+                                                                               #"CENTRAL WATER CATCHMENT",
+                                                                               "SEMBAWANG"
+                                                                               #"WOODLANDS"
+                                                                )),
+                                                    sliderInput("lixelSize", "Lixel Size:", min = 100, max = 1000, value = 700),
+                                                    sliderInput("mindist", "Minimum Distance:", min = 100, max = 1000, value = 350),
+                                                    selectInput(inputId = "kernelName",
+                                                                label = "Choose the kernel to be used:",
+                                                                choices = list("Quartic" = "quartic",
+                                                                               "Triangle" = "triangle",
+                                                                               "Epanechnikov" = "epanechnikov",
+                                                                               "Gaussian" = "gaussian",
+                                                                               "Scaled Gaussian" = "scaled_gaussian",
+                                                                               "Tricube" = "tricube",
+                                                                               "Cosine" = "cosine",
+                                                                               "Triweight" = "triweight",
+                                                                               "Uniform" = "uniform"))
                                                   )
                                                 ),
                                                 uiOutput("netStatsExplainerp1"),
@@ -475,6 +488,10 @@ server <- function(input, output, session) {
     # Debugging: Print selected area
     #print(input$area)
     
+    # Get selected lixel size and minimum distance
+    lixel_size <- input$lixelSize
+    min_dist <- input$mindist
+    
     # Filter mpsz based on selected area
     filtered_mpsz <- mpsz %>%
       filter(PLN_AREA_N == input$area) %>%
@@ -504,7 +521,8 @@ server <- function(input, output, session) {
     #print(casted_roads)
     
     # Lixelize roads
-    lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
+    #lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
+    lixels <- lixelize_lines(casted_roads, lixel_size, mindist = min_dist)
     
     # Extract samples
     samples <- lines_center(lixels)
@@ -525,6 +543,26 @@ server <- function(input, output, session) {
     # Debugging: Print selected area
     print(input$area)
     
+    # Get selected lixel size and minimum distance
+    lixel_size <- input$lixelSize
+    min_dist <- input$mindist
+    
+    # Get selected kernel name from input
+    kernel_name <- input$kernelName
+    print(kernel_name)
+    
+    # Define bandwidth using selected kernel
+    bw_method <- switch(kernel_name,
+                        "quartic" = "quartic",
+                        "triangle" = "triangle",
+                        "epanechnikov" = "epanechnikov",
+                        "gaussian" = "gaussian",
+                        "scaled_gaussian" = "scaled gaussian",
+                        "tricube" = "tricube",
+                        "cosine" = "cosine",
+                        "triweight" = "triweight",
+                        "uniform" = "uniform")  # Default to gaussian if unknown kernel
+    
     # Filter mpsz based on selected area
     filtered_mpsz <- mpsz %>%
       filter(PLN_AREA_N == input$area) %>%
@@ -554,8 +592,9 @@ server <- function(input, output, session) {
     #print(casted_roads)
     
     # Lixelize roads
-    lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
+    #lixels <- lixelize_lines(casted_roads, 700, mindist = 350)
     #print(lixels)
+    lixels <- lixelize_lines(casted_roads, lixel_size, mindist = min_dist)
     
     # Extract samples
     samples <- lines_center(lixels)
@@ -570,7 +609,7 @@ server <- function(input, output, session) {
                            events = origin,
                            w = rep(1,nrow(origin)),
                            samples = samples,
-                           kernel_name = "quartic",
+                           kernel_name = bw_method,
                            bw = 300, 
                            div= "bw", 
                            method = "simple", 
