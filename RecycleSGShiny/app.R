@@ -194,10 +194,10 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                                 label = "Select Area",
                                                                 choices = list("MUSEUM",
                                                                                "MARINE PARADE",
-                                                                               #"DOWNTOWN CORE",
+                                                                               "DOWNTOWN CORE",
                                                                                "QUEENSTOWN",
-                                                                               #"OUTRAM",
-                                                                               "KALLANG",
+                                                                               "OUTRAM",
+                                                                               #"KALLANG",
                                                                                "TANGLIN",
                                                                                "NEWTON",
                                                                                #"CLEMENTI",
@@ -604,9 +604,14 @@ server <- function(input, output, session) {
     origin <- st_intersection(binlocation, filtered_mpsz)
     #print(origin)
     
+    #print(identical(names(xd.small[[1]]), names(xd.small[[2]]) ))
+    print(colnames(casted_roads))
+    print(colnames(origin))
+
     # Compute network kernel
     densitiesMe <- nkde(casted_roads, 
                            events = origin,
+                           #events = rename(origin, x = geometry), 
                            w = rep(1,nrow(origin)),
                            samples = samples,
                            kernel_name = bw_method,
