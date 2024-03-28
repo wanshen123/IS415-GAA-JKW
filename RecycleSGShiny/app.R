@@ -30,37 +30,14 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                   ),
                   tags$head(tags$style(
                     type="text/css",
-                    "#childcare_image img {max-width: 100%; width: 100%; height: auto}",
-                    "#introductionkernel img {max-width: 100%; width: 100%; height: auto}",
-                    ".navbar {background-color: rgb(48, 48, 48)}",
-                    " #clark{
-                      color: grey;
-                      background: rgba(0, 0, 0, 0);
-                      border-color: grey;
-                      border-style: solid;
-                      border-width: 2px;
-                    }",
-                    " #netKDESettings {
-                      color: grey;
-                      background: rgba(0, 0, 0, 0);
-                      border-color: grey;
-                      border-style: solid;
-                      border-width: 2px;
-                    }",
-                    " #KDESettings {
-                      color: grey;
-                      background: rgba(0, 0, 0, 0);
-                      border-color: grey;
-                      border-style: solid;
-                      border-width: 2px;
-                    }",
+                    " 
                     
-                    
+                    "
                   )),
                   tabPanel("Home Page",
                            fluidRow(
                              column(9,
-                                    h2("Project Motivation"),
+                                    h2("Project Introduction & Motivation"),
                                     hr(),
                                     column(10,
                                            uiOutput("projectMotivation"),                         
@@ -131,8 +108,6 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                 sidebarLayout(
                                                   mainPanel(
                                                     tmapOutput("kdePlot", width = "100%", height = "700"),
-                                                    br(),
-                                                    verbatimTextOutput("netKDESettings"),
                                                   ),
                                                   sidebarPanel(
                                                     shinyjs::useShinyjs(),
@@ -601,7 +576,7 @@ server <- function(input, output, session) {
                                      <li><a href='https://www.linkedin.com/in/jinyuan-low/'>Low Jin Yuan</a></li>
                                    </ul>
                                    <br>
-                                   <p> Access our user guide <a href = 'https://is415-gaa-jkw.netlify.app/'>here</a></p>
+                                   <p> Access our user guide <a href = 'https://is415-gaa-jkw.netlify.app/'>here</a>.</p>
                                    <br>
                                    <p> This project is for IS415 Geospatial Analytics & Application. </p>
                                    <img src = 'smulogo.png' width = 90%, height = 90%>")))
@@ -611,14 +586,14 @@ server <- function(input, output, session) {
                                                 <h4>As urbanization accelerates globally, effective waste management becomes paramount to maintain environmental sustainability and public health. Singapore, a densely populated city-state, faces significant waste management challenges. While initiatives like recycling have been implemented, optimizing the distribution of recycling bins remains crucial for maximizing participation and minimizing waste diversion. Geospatial analytics offer a powerful tool set to analyze spatial data, optimize resource allocation, and enhance waste management strategies.
                                                   Under Singapore’s Zero Waste Masterplan and the Singapore Green Plan, Singapore aims to increase its overall recycling rate to 70 per cent by 2030. Achieving this ambitious goal necessitates a comprehensive assessment of the existing recycling infrastructure and targeted interventions to address any gaps in distribution.</h4>"))
   
-  output$ppancppa <- renderUI(HTML("<h2>First-order Spatial Point Patterns Analysis</h2>
+  output$ppancppa <- renderUI(HTML("<h3>First-order Spatial Point Patterns Analysis</h3>
 <h4>First-order Spatial Point Patterns Analysis refers to the examination and characterization of the spatial distribution of point features within a study area without considering the influence of other point patterns. It involves analyzing the arrangement of individual point locations to identify patterns such as clustering, dispersion, or randomness. Common techniques used in first-order spatial point pattern analysis include Ripley's K-function, nearest neighbor analysis, and quadrat analysis. This analysis provides fundamental insights into the underlying spatial processes and can aid in understanding the drivers behind point pattern distributions.</h4>
 
-<h2>Hot Spot and Cold Spot Area Analysis (HCSA)</h2>
+<h3>Hot Spot and Cold Spot Area Analysis (HCSA)</h3>
 <h4>Hot Spot and Cold Spot Area Analysis (HCSA), also known as hotspot analysis or spatial clustering analysis, is a method used to identify statistically significant clusters of high or low values within a spatial dataset. It involves identifying areas where the observed values are significantly different from what would be expected under a random spatial distribution. Hot spots represent areas with high values (e.g., high population density, high crime rates), while cold spots represent areas with low values. HCSA techniques often involve the application of statistical tests, such as the Getis-Ord Gi* statistic or the Moran's I statistic, to assess the significance of identified clusters. This analysis helps in identifying spatial patterns, trends, and areas of interest, which can be valuable for decision-making, resource allocation, and targeted interventions in various fields including public health, urban planning, and environmental management.</h4>"))
   
   output$aboutus <- renderUI(HTML("<h4> RecycleSG has been developed to support users, particularly those with limited technological expertise, in conducting geographical point pattern analysis within the context of Singapore's recycling bin distribution. This application is designed to aid users in two main types of analysis, focusing specifically on First Order Spatial Point Pattern Analysis as well as Hot Spot and Cold Spot Area Analysis (HCSA). Each analysis provided by the application includes statistical functions, kernel density estimation, and various mapping functionalities. </h4>
-                                  <h4> Our project focuses on leveraging geospatial analytics to optimize recycling bin placement and management in Singapore urban areas. By analysing spatial data, we aim to identify optimal locations for recycling bins, improve waste management efficiency, and promote sustainability. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University. </h4>"))
+                                  <h4> Our project focuses on leveraging geospatial analytics to optimize recycling bin placement and management in Singapore urban areas. By analysing spatial data, we aim to identify optimal locations for recycling bins, improve waste management efficiency, and promote sustainability. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University. We aim to develop a comprehensive application that leverages geospatial analytics to optimize the distribution of recycling bins across Singapore. By analyzing data on population density and existing bin locations, the application will identify spatial patterns, gaps in coverage, and opportunities for improvement in the placement of normal blue recycling bins, incentive bins, and e-waste bins. The application will then provide insights based on the analysis and allow users to interactively explore the data and results. </h4>"))
   
   output$netKDEExpaliner <- renderUI(HTML("<h3>Kernel Density Estimation Map</h3>
                                             <hr>
