@@ -10,7 +10,6 @@ library(ggplot2)
 library(plotly)
 library(spatstat)
 library(raster)
-library(maptools)
 library(tidyr)
 
 mpsz <- st_read(dsn = "testdata", layer = "MPSZ-2019")
@@ -21,10 +20,22 @@ sg_sf <- st_read(dsn = "testdata", layer = "CostalOutline")
 
 # Define UI for application
 ui <- fluidPage(theme = shinytheme("cosmo"),
+                tags$head(
+                  tags$style(
+                    HTML(
+                      "
+                      .navbar-brand img {
+                        margin-top: -5px; /* Adjust the top margin as needed */
+                        margin-right: 5px; /* Adjust the right margin as needed */
+                      }
+                      "
+                    )
+                  )
+                ),
                 navbarPage(                                                
                   title = div(
                     a(
-                      h2("RecycleSG", style = "margin-top: -8px;padding-right:10px;padding-bottom:10px"),
+                      img(src = "recyclesglogo.png", height = "38px", width = "100%", style = "margin-left: 10px;"),  # Add your image here
                       href = "https://is415-gaa-jkw.netlify.app/"
                     )
                   ),
@@ -593,7 +604,7 @@ server <- function(input, output, session) {
 <h4>Hot Spot and Cold Spot Area Analysis (HCSA), also known as hotspot analysis or spatial clustering analysis, is a method used to identify statistically significant clusters of high or low values within a spatial dataset. It involves identifying areas where the observed values are significantly different from what would be expected under a random spatial distribution. Hot spots represent areas with high values (e.g., high population density, high crime rates), while cold spots represent areas with low values. HCSA techniques often involve the application of statistical tests, such as the Getis-Ord Gi* statistic or the Moran's I statistic, to assess the significance of identified clusters. This analysis helps in identifying spatial patterns, trends, and areas of interest, which can be valuable for decision-making, resource allocation, and targeted interventions in various fields including public health, urban planning, and environmental management.</h4>"))
   
   output$aboutus <- renderUI(HTML("<h4> RecycleSG has been developed to support users, particularly those with limited technological expertise, in conducting geographical point pattern analysis within the context of Singapore's recycling bin distribution. This application is designed to aid users in two main types of analysis, focusing specifically on First Order Spatial Point Pattern Analysis as well as Hot Spot and Cold Spot Area Analysis (HCSA). Each analysis provided by the application includes statistical functions, kernel density estimation, and various mapping functionalities. </h4>
-                                  <h4> Our project focuses on leveraging geospatial analytics to optimize recycling bin placement and management in Singapore urban areas. By analysing spatial data, we aim to identify optimal locations for recycling bins, improve waste management efficiency, and promote sustainability. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University. We aim to develop a comprehensive application that leverages geospatial analytics to optimize the distribution of recycling bins across Singapore. By analyzing data on population density and existing bin locations, the application will identify spatial patterns, gaps in coverage, and opportunities for improvement in the placement of normal blue recycling bins, incentive bins, and e-waste bins. The application will then provide insights based on the analysis and allow users to interactively explore the data and results. </h4>"))
+                                  <h4> Our project aims to utilize geospatial analytics to identify optimal locations for recycling bin placement and management, empowering relevant stakeholders to make impactful decisions that benefit the environment. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University. We aim to develop a comprehensive application that leverages geospatial analytics to display the distribution of recycling bins across Singapore. By analyzing data on population density and existing bin locations, the application will identify spatial patterns, gaps in coverage, and opportunities for improvement in the placement of normal blue recycling bins, incentive bins, and e-waste bins. The application will then provide insights based on the analysis and allow users to interactively explore the data and results. </h4>"))
   
   output$netKDEExpaliner <- renderUI(HTML("<h3>Kernel Density Estimation Map</h3>
                                             <hr>
