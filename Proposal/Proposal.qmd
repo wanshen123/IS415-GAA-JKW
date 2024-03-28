@@ -73,3 +73,7 @@ The shiny application will integrate the outputs from the Spatial Analysis Modul
 ![](is415_2024-02-25_09.26am.png){width="9000"}
 
 ## 8.0 Story Boarding
+
+Hot Spot and Cold Spot Area Analysis (HCSA): <https://is415-gaa-dljy-demo.netlify.app/take-home_assignment/take-home_assignment03>
+
+First-order Spatial Point Patterns Analysis: <https://is415-gaa-wanshen.netlify.app/take-home_ex/take-home_ex03/take-home_ex03>
