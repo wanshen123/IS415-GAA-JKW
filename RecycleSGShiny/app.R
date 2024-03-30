@@ -13,7 +13,6 @@ library(raster)
 library(tidyr)
 
 mpsz <- st_read(dsn = "testdata", layer = "MPSZ-2019")
-binlocation <- read_rds("Data/alba/ewbins.rds")
 roads_in_singapore <- read_rds("testdata/sgRoad.rds")
 inbins <- read_rds("Data/nea/inbins.rds")
 sg_sf <- st_read(dsn = "testdata", layer = "CostalOutline")
@@ -122,6 +121,14 @@ ui <- fluidPage(theme = shinytheme("cosmo"),
                                                   ),
                                                   sidebarPanel(
                                                     shinyjs::useShinyjs(),
+                                                    h4("Bin Type:"),
+                                                    h5("Select the type of bin to be displayed on the map"),
+                                                    selectInput(inputId = "bin_type2_ws",
+                                                                label = "Select Type of Bin",
+                                                                choices = list("Blue Bins" = "Blue Bins",
+                                                                               "E-Waste Bins" = "E-Waste Bins",
+                                                                               "Incentive Bins" = "Incentive Bins"),
+                                                                selected = "E-Waste Bins"),
                                                     h4("Bandwidth Type:"),
                                                     h5("Select the bandwidth type:"),
                                                     selectInput(inputId = "bandwidth_type",
@@ -354,6 +361,17 @@ server <- function(input, output, session) {
   
   output$kdePlot <- renderTmap({
     
+    if (input$bin_type2_ws == "Blue Bins"){
+      binlocation <- st_read(dsn = "Data/gov", layer = "RECYCLINGBINS") %>%
+        st_transform(crs = 3414)
+    }
+    else if (input$bin_type2_ws == "E-Waste Bins"){
+      binlocation <- readRDS("Data/alba/ewbins.rds")
+    }
+    else{
+      binlocation <- readRDS("Data/nea/inbins.rds")
+    }
+    
     sg_sf <- st_transform(sg_sf, crs = 3414)
     sg_owin <- as.owin(sg_sf)
     
@@ -375,10 +393,8 @@ server <- function(input, output, session) {
       kde_origin_adaptive1 <- adaptive.density(bin_ppp.1, method="kernel")
       
       # Convert to raster
-      gridded_kde_origin_adaptive <- as.SpatialGridDataFrame.im(kde_origin_adaptive)
-      gridded_kde_origin_adaptive1 <- as.SpatialGridDataFrame.im(kde_origin_adaptive1)
-      kde_raster <- raster(gridded_kde_origin_adaptive)
-      kde_raster1 <- raster(gridded_kde_origin_adaptive1)
+      kde_raster <- raster(kde_origin_adaptive)
+      kde_raster1 <- raster(kde_origin_adaptive1)
       projection(kde_raster) <- CRS("+init=EPSG:3414")
       projection(kde_raster1) <- CRS("+init=EPSG:3414")
       
@@ -423,10 +439,8 @@ server <- function(input, output, session) {
                              kernel = bw_method)
       
       # Convert to raster
-      gridded_kde_bin_bw <- as.SpatialGridDataFrame.im(kde_bin_bw)
-      gridded_kde_bin_bw1 <- as.SpatialGridDataFrame.im(kde_bin_bw1)
-      kde_raster <- raster(gridded_kde_bin_bw)
-      kde_raster1 <- raster(gridded_kde_bin_bw1)
+      kde_raster <- raster(kde_bin_bw)
+      kde_raster1 <- raster(kde_bin_bw1)
       projection(kde_raster) <- CRS("+init=EPSG:3414")
       projection(kde_raster1) <- CRS("+init=EPSG:3414")
     }
