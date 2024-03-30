@@ -15,10 +15,9 @@ The navigation bar will be located at the top of the page. The navigation bar wi
 
 ![](image/Navbar.png)
 
-For first-order spatial point pattern analysis & hot spot and cold spot area analysis, you can navigate to the respective subtabs under the main tab. 
+For first-order spatial point pattern analysis & hot spot and cold spot area analysis, you can navigate to the respective subtabs under the main tab.
 
-![](image/SPP_subtab.png)
-![](image/HCSA_subtab.png)
+![](image/SPP_subtab.png) ![](image/HCSA_subtab.png)
 
 # Home
 
@@ -32,6 +31,8 @@ The Exploratory Data Analysis page features an interactive map showcasing the di
 
 Currently, there is no map available that allows the display of the different types of recycling bins in Singapore. However, the application enables users to visualize the distribution of Blue Bins, E-Waste Bins, and Incentive Bins across various locations in Singapore. Enhancing valuable insights into the accessibility and availability of different types of recycling facilities within the city-state.
 
+**Instruction:**
+
 # First-order Spatial Point Pattern Analysis
 
 # Hot Spot and Cold Spot Area Analysis
@@ -39,7 +40,6 @@ Currently, there is no map available that allows the display of the different ty
 The Hot Spot and Cold Spot Area Analysis page comprises three subtabs: Introduction, Local Indicators of Spatial Association (LISA) Analysis, and Visualisation of Hot Spot and Cold Spot Areas.
 
 ::: {.panel-tabset .nav-pills}
-
 ## Introduction
 
 The introduction subtab offers a concise overview of hotspot and coldspot analysis for recycling bin placement in Singapore. It delves into exploring the clustering of bins and pinpointing areas with abundant bin placement, as well as those with minimal to no presence. By highlighting the potential benefits derived from employing this analytics technique, we can gain valuable insights to optimize waste management strategies effectively
@@ -54,12 +54,13 @@ The LISA (Local Indicators of Spatial Association) subtab in this user guide ser
 
 Moreover, the LISA subtab enhances user interaction and customization through an intuitive interactive map interface. This feature empowers users to tailor their exploration experience by adjusting various parameters, including the type of recycling bin, significance level, and map type, to align with their specific requirements and objectives. Additionally, users can select different categories for generating the map, such as mean, median, and pysal, allowing for nuanced analysis and comparison.
 
+**Instruction:**
 
 ## HCSA
 
 The HCSA (Hotspot and Coldspot Analysis) subtab within this user guide offers a comprehensive understanding of interpreting the HCSA map. By delving into the nuances of hotspot and coldspot analysis, users gain insights into identifying areas of high and low activity regarding recycling bin placement in Singapore. This section not only elucidates the significance of these analytical techniques but also provides practical guidance on how to leverage the information gleaned from the HCSA map effectively.
 
-![](image/HCSA.png)
-Furthermore, the HCSA subtab enhances user engagement by offering an interactive map interface. This feature empowers users to personalize their exploration experience by adjusting parameters such as the type of recycling bin, significance level, and map type. Whether users seek to analyze specific categories of recycling bins or explore different levels of significance, this interactive map caters to their diverse needs and preferences.
-  
+![](image/HCSA.png) Furthermore, the HCSA subtab enhances user engagement by offering an interactive map interface. This feature empowers users to personalize their exploration experience by adjusting parameters such as the type of recycling bin, significance level, and map type. Whether users seek to analyze specific categories of recycling bins or explore different levels of significance, this interactive map caters to their diverse needs and preferences.
+
+**Instruction:**
 :::
