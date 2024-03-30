@@ -353,17 +353,12 @@ server <- function(input, output, session) {
   })
   
   output$kdePlot <- renderTmap({
-    library(maptools)
-    # Convert binlocation to spatial objects
-    bin_sf <- as_Spatial(binlocation)
-    bin_sp <- as(bin_sf, "SpatialPoints")
+    
     sg_sf <- st_transform(sg_sf, crs = 3414)
-    sg <- as_Spatial(sg_sf)
-    sg_sp <- as(sg, "SpatialPolygons")
-    sg_owin <- as.owin(sg_sp)
+    sg_owin <- as.owin(sg_sf)
     
     # Create ppp object
-    bin_ppp <- as(bin_sp, "ppp")
+    bin_ppp <- as.ppp(binlocation)
     binSG_ppp <- bin_ppp[sg_owin] 
     bin_ppp.km <- rescale(binSG_ppp, 1000, "km") # set to 1000 for working legend
     bin_ppp.1 <- rescale(binSG_ppp, 1, "km") # set to 1000 for working legend

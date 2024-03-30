@@ -1,6 +1,6 @@
 ---
 title: "IS415-GAA Group 6: User Guide - Geospatial Analysis of Recycling Bin Distribution in Singapore"
-date: 03/25/2024
+date: 03/30/2024
 date-format: "DD/MM/YYYY"
 editor: visual
 ---
