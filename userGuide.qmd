@@ -33,23 +33,23 @@ Currently, there is no map available that allows the display of the different ty
 
 **Instruction:**
 
-1. Select the type of map you wish to view by clicking on the dropdown menu.
+1.  Select the type of map you wish to view by clicking on the dropdown menu.
 
-2. There are a total of 3 types of maps available: CartoDB, OpenStreetMap, and Esri.
+2.  There are a total of 3 types of maps available: CartoDB, OpenStreetMap, and Esri.
 
-3. Click on any of the map types to change the map display.
+3.  Click on any of the map types to change the map display.
 
-4. Select the type of recycling bin you wish to view by clicking on the dropdown menu.
+4.  Select the type of recycling bin you wish to view by clicking on the dropdown menu.
 
-5. There are a total of 4 types of recycling bins available: Blue Bin, E-Waste Bin, Incentive Bin and All Bins.
+5.  There are a total of 4 types of recycling bins available: Blue Bin, E-Waste Bin, Incentive Bin and All Bins.
 
-6. Click on any of the recycling bin types to filter the data and view the distribution of the selected recycling bin type.
+6.  Click on any of the recycling bin types to filter the data and view the distribution of the selected recycling bin type.
 
-7. Tick or untick the checkbox to view the population density in Singapore.
+7.  Tick or untick the checkbox to view the population density in Singapore.
 
-8. Hover over the markers on the map to view the location of the bins.
+8.  Hover over the markers on the map to view the location of the bins.
 
-9. Use the zoom in and zoom out buttons to adjust the map view.
+9.  Use the zoom in and zoom out buttons to adjust the map view.
 
 10. Click on the markers to view the details of the bins.
 
@@ -58,7 +58,6 @@ Currently, there is no map available that allows the display of the different ty
 The First-order Spatial Point Pattern Analysis page comprises three subtabs: Introduction, Kernel Density Estimation, and Network Constrained KDE Analysis.
 
 ::: {.panel-tabset .nav-pills}
-
 ## Introduction
 
 The Introduction subtab provides an overview of the first-order spatial point pattern analysis for recycling bin placement in Singapore. It delves into the significance of spatial point pattern analysis in identifying clustering patterns and spatial relationships among recycling bins. By leveraging this analytical technique, users can gain valuable insights into the distribution of recycling bins across Singapore.
@@ -73,21 +72,21 @@ The KDE (Kernel Density Estimation) subtab offers a detailed explanation of the 
 
 **Instruction:**
 
-1. Select the type of bandwidth you wish to use by clicking on the dropdown menu.
+1.  Select the type of bandwidth you wish to use by clicking on the dropdown menu.
 
-2. There are a total of 2 types of bandwidth available: Fixed and Adaptive.
+2.  There are a total of 2 types of bandwidth available: Fixed and Adaptive.
 
-3. Click on any of the bandwidth types to change the KDE map display.
+3.  Click on any of the bandwidth types to change the KDE map display.
 
-4. By selecting fixed bandwidth, you are provided with the different type of kernels and bandwidth to choose from.
+4.  By selecting fixed bandwidth, you are provided with the different type of kernels and bandwidth to choose from.
 
-5. There are a total of 4 types of kernels available: Quartic, Gaussian, Epanechnikov, and Disc.
+5.  There are a total of 4 types of kernels available: Quartic, Gaussian, Epanechnikov, and Disc.
 
-6. There are a total of 4 types of bandwidth available: diggle, ppl, CvL and scott.
+6.  There are a total of 4 types of bandwidth available: diggle, ppl, CvL and scott.
 
-7. Click on any of the kernels and bandwidth to change the KDE map display.
+7.  Click on any of the kernels and bandwidth to change the KDE map display.
 
-8. Use the zoom in and zoom out buttons to adjust the map view.
+8.  Use the zoom in and zoom out buttons to adjust the map view.
 
 ## NetKDE
 
@@ -97,24 +96,23 @@ The NetKDE (Network Constrained KDE) subtab within this user guide offers a comp
 
 **Instruction:**
 
-1. Select the type of bin you wish to view by clicking on the dropdown menu.
+1.  Select the type of bin you wish to view by clicking on the dropdown menu.
 
-2. There are a total of 2 types of bins available: Blue Bin and E-Waste Bin.
+2.  There are a total of 2 types of bins available: Blue Bin and E-Waste Bin.
 
-3. Click on any of the bin types to filter the data and view the distribution of the selected bin type.
+3.  Click on any of the bin types to filter the data and view the distribution of the selected bin type.
 
-4. Select the area you wish to view by clicking on the dropdown menu.
+4.  Select the area you wish to view by clicking on the dropdown menu.
 
-5. There are a total of 25 areas available for selection.
+5.  There are a total of 25 areas available for selection.
 
-6. Click on any of the areas to filter the data and view the distribution of the selected area.
+6.  Click on any of the areas to filter the data and view the distribution of the selected area.
 
-7. Use the zoom in and zoom out buttons to adjust the map view.
+7.  Use the zoom in and zoom out buttons to adjust the map view.
 
-8. Hover over the markers on the map to view the location of the bins.
+8.  Hover over the markers on the map to view the location of the bins.
 
-9. Click on the markers to view the details of the bins.
-
+9.  Click on the markers to view the details of the bins.
 :::
 
 # Hot Spot and Cold Spot Area Analysis
@@ -138,23 +136,23 @@ Moreover, the LISA subtab enhances user interaction and customization through an
 
 **Instruction:**
 
-1. Select the type of map you wish to view by clicking on the dropdown menu.
+1.  Select the type of map you wish to view by clicking on the dropdown menu.
 
-2. There are a total of 3 types of maps available: CartoDB, OpenStreetMap, and Esri.
+2.  There are a total of 3 types of maps available: CartoDB, OpenStreetMap, and Esri.
 
-3. Click on any of the map types to change the map display.
+3.  Click on any of the map types to change the map display.
 
-4. Use the slider to adjust the significance level. The significance level ranges from 0.05 to 0.2.
+4.  Use the slider to adjust the significance level. The significance level ranges from 0.05 to 0.2.
 
-5. Click on the slider and drag it to the desired significance level.
+5.  Click on the slider and drag it to the desired significance level.
 
-6. Select the type of recycling bin you wish to view by clicking on the dropdown menu.
+6.  Select the type of recycling bin you wish to view by clicking on the dropdown menu.
 
-7. There are a total of 3 types of recycling bins available: Blue Bin, E-Waste Bin and Incentive Bin.
+7.  There are a total of 3 types of recycling bins available: Blue Bin, E-Waste Bin and Incentive Bin.
 
-8. Click on any of the recycling bin types to filter the data and view the distribution of the selected recycling bin type.
+8.  Click on any of the recycling bin types to filter the data and view the distribution of the selected recycling bin type.
 
-9. Select the type of category you wish to view by clicking on the dropdown menu.
+9.  Select the type of category you wish to view by clicking on the dropdown menu.
 
 10. There are a total of 3 types of categories available: Mean, Median and Pysal.
 
@@ -164,7 +162,7 @@ Moreover, the LISA subtab enhances user interaction and customization through an
 
 13. Hover over the area to view the value of the selected category.
 
-14. Click on the area to view the details of the selected category.
+14. Click on the area to view the details of the selected area.
 
 ## HCSA
 
@@ -174,26 +172,25 @@ The HCSA (Hotspot and Coldspot Analysis) subtab within this user guide offers a 
 
 **Instruction:**
 
-1. Select the type of map you wish to view by clicking on the dropdown menu.
+1.  Select the type of map you wish to view by clicking on the dropdown menu.
 
-2. There are a total of 3 types of maps available: CartoDB, OpenStreetMap, and Esri.
+2.  There are a total of 3 types of maps available: CartoDB, OpenStreetMap, and Esri.
 
-3. Click on any of the map types to change the map display.
+3.  Click on any of the map types to change the map display.
 
-4. Use the slider to adjust the significance level. The significance level ranges from 0.05 to 0.2.
+4.  Use the slider to adjust the significance level. The significance level ranges from 0.05 to 0.2.
 
-5. Click on the slider and drag it to the desired significance level.
+5.  Click on the slider and drag it to the desired significance level.
 
-6. Select the type of recycling bin you wish to view by clicking on the dropdown menu.
+6.  Select the type of recycling bin you wish to view by clicking on the dropdown menu.
 
-7. There are a total of 3 types of recycling bins available: Blue Bin, E-Waste Bin and Incentive Bin.
+7.  There are a total of 3 types of recycling bins available: Blue Bin, E-Waste Bin and Incentive Bin.
 
-8. Click on any of the recycling bin types to filter the data and view the distribution of the selected recycling bin type.
+8.  Click on any of the recycling bin types to filter the data and view the distribution of the selected recycling bin type.
 
-9. Use the zoom in and zoom out buttons to adjust the map view.
+9.  Use the zoom in and zoom out buttons to adjust the map view.
 
-10. Hover over the area to view the value of GI*. 
+10. Hover over the area to view the value of GI\*.
 
 11. Click on the area to view the details of the selected area.
-
 :::
