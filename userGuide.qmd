@@ -72,21 +72,27 @@ The KDE (Kernel Density Estimation) subtab offers a detailed explanation of the 
 
 **Instruction:**
 
-1.  Select the type of bandwidth you wish to use by clicking on the dropdown menu.
+1. Select the type of bin you wish to view by clicking on the dropdown menu.
 
-2.  There are a total of 2 types of bandwidth available: Fixed and Adaptive.
+2. There are a total of 3 types of bins available: Blue Bin, E-Waste Bin, and Incentive Bin.
 
-3.  Click on any of the bandwidth types to change the KDE map display.
+3. Click on any of the bin types to filter the data and view the distribution of the selected bin type.
 
-4.  By selecting fixed bandwidth, you are provided with the different type of kernels and bandwidth to choose from.
+4.  Select the type of bandwidth you wish to use by clicking on the dropdown menu.
 
-5.  There are a total of 4 types of kernels available: Quartic, Gaussian, Epanechnikov, and Disc.
+5.  There are a total of 2 types of bandwidth available: Fixed and Adaptive.
 
-6.  There are a total of 4 types of bandwidth available: diggle, ppl, CvL and scott.
+6.  Click on any of the bandwidth types to change the KDE map display.
 
-7.  Click on any of the kernels and bandwidth to change the KDE map display.
+7.  By selecting fixed bandwidth, you are provided with the different type of kernels and bandwidth to choose from.
 
-8.  Use the zoom in and zoom out buttons to adjust the map view.
+8.  There are a total of 4 types of kernels available: Quartic, Gaussian, Epanechnikov, and Disc.
+
+9.  There are a total of 4 types of bandwidth available: diggle, ppl, CvL and scott.
+
+10.  Click on any of the kernels and bandwidth to change the KDE map display.
+
+11.  Use the zoom in and zoom out buttons to adjust the map view.
 
 ## NetKDE
 
