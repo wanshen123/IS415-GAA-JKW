@@ -1,45 +1,10 @@
 [
   {
-    "objectID": "RecycleSGShiny/testdata/MPSZ-2019.html",
-    "href": "RecycleSGShiny/testdata/MPSZ-2019.html",
-    "title": "IS415-GAA-JinYuan&WanShen",
+    "objectID": "userGuide.html",
+    "href": "userGuide.html",
+    "title": "IS415-GAA Group 6: User Guide - Geospatial Analysis of Recycling Bin Distribution in Singapore",
     "section": "",
-    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n        0 0     false"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "IS415-GAA JinYuan & WanShen",
-    "section": "",
-    "text": "Our project focuses on leveraging geospatial analytics to optimize recycling bin placement and management in Singapore urban areas. By analysing spatial data, we aim to identify optimal locations for recycling bins, improve waste management efficiency, and promote sustainability. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University."
-  },
-  {
-    "objectID": "index.html#about-us",
-    "href": "index.html#about-us",
-    "title": "IS415-GAA JinYuan & WanShen",
-    "section": "",
-    "text": "Our project focuses on leveraging geospatial analytics to optimize recycling bin placement and management in Singapore urban areas. By analysing spatial data, we aim to identify optimal locations for recycling bins, improve waste management efficiency, and promote sustainability. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University."
-  },
-  {
-    "objectID": "Data/prep/MPSZ-2019.html",
-    "href": "Data/prep/MPSZ-2019.html",
-    "title": "IS415-GAA-JinYuan&WanShen",
-    "section": "",
-    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n        0 0     false"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "dataPreProcess.html",
-    "href": "dataPreProcess.html",
-    "title": "IS415-GAA Group 6: Data Pre-Processing - Geospatial Analysis of Recycling Bin Distribution in Singapore",
-    "section": "",
-    "text": "pacman::p_load(sf, sp, sfdep, tmap, tidyverse, plotly)"
+    "text": "User Guide\nRecycleSG Shiny App User Guide: You can access the Shiny application here.\n\n\nNavigation\nThe navigation bar will be located at the top of the page. The navigation bar will contain the following tabs: Home, Exploratory Data Analysis, First-order Spatial Point Pattern Analysis, Hot Spot and Cold Spot Area Analysis. Select tab will be highlighted in black.\n\nFor first-order spatial point pattern analysis & hot spot and cold spot area analysis, you can navigate to the respective subtabs under the main tab.\n \n\n\nHome\nThe section provides a summary of the project’s motivation and outlines the various types of geospatial analytic techniques employed in our Shiny App.\n\n\nExploratory Data Analysis\nThe Exploratory Data Analysis page features an interactive map showcasing the distribution of recycling bins across Singapore. Users can filter the data by the type of recycling bin (Blue Bin, E-Waste Bin, Incentive Bin and All) and visualize it alongside Singapore’s population density. Additionally, users have the option to switch between different map display types such as CartoDB, OpenStreetMap, and Esri.\n\nCurrently, there is no map available that allows the display of the different types of recycling bins in Singapore. However, the application enables users to visualize the distribution of Blue Bins, E-Waste Bins, and Incentive Bins across various locations in Singapore. Enhancing valuable insights into the accessibility and availability of different types of recycling facilities within the city-state.\n\n\nFirst-order Spatial Point Pattern Analysis\n\n\nHot Spot and Cold Spot Area Analysis\nThe Hot Spot and Cold Spot Area Analysis page comprises three subtabs: Introduction, Local Indicators of Spatial Association (LISA) Analysis, and Visualisation of Hot Spot and Cold Spot Areas.\n\nIntroductionLISAHCSA\n\n\nThe introduction subtab offers a concise overview of hotspot and coldspot analysis for recycling bin placement in Singapore. It delves into exploring the clustering of bins and pinpointing areas with abundant bin placement, as well as those with minimal to no presence. By highlighting the potential benefits derived from employing this analytics technique, we can gain valuable insights to optimize waste management strategies effectively\n\n\n\nThe LISA (Local Indicators of Spatial Association) subtab in this user guide serves as a pivotal resource for understanding and interpreting the LISA map effectively. By offering a detailed explanation of LISA map interpretation, users gain insights into the spatial patterns and relationships regarding recycling bin placement across Singapore. This section not only elucidates the theoretical underpinnings of LISA analysis but also provides practical guidance on its application in real-world scenarios.\n\nMoreover, the LISA subtab enhances user interaction and customization through an intuitive interactive map interface. This feature empowers users to tailor their exploration experience by adjusting various parameters, including the type of recycling bin, significance level, and map type, to align with their specific requirements and objectives. Additionally, users can select different categories for generating the map, such as mean, median, and pysal, allowing for nuanced analysis and comparison.\n\n\nThe HCSA (Hotspot and Coldspot Analysis) subtab within this user guide offers a comprehensive understanding of interpreting the HCSA map. By delving into the nuances of hotspot and coldspot analysis, users gain insights into identifying areas of high and low activity regarding recycling bin placement in Singapore. This section not only elucidates the significance of these analytical techniques but also provides practical guidance on how to leverage the information gleaned from the HCSA map effectively.\n Furthermore, the HCSA subtab enhances user engagement by offering an interactive map interface. This feature empowers users to personalize their exploration experience by adjusting parameters such as the type of recycling bin, significance level, and map type. Whether users seek to analyze specific categories of recycling bins or explore different levels of significance, this interactive map caters to their diverse needs and preferences."
   },
   {
     "objectID": "Proposal/Proposal.html",
@@ -96,6 +61,13 @@
     "title": "IS415-GAA Group 6: Project Proposal - Geospatial Analysis of Recycling Bin Distribution in Singapore",
     "section": "",
     "text": "Hot Spot and Cold Spot Area Analysis (HCSA): https://is415-gaa-dljy-demo.netlify.app/take-home_assignment/take-home_assignment03\nFirst-order Spatial Point Patterns Analysis: https://is415-gaa-wanshen.netlify.app/take-home_ex/take-home_ex03/take-home_ex03"
+  },
+  {
+    "objectID": "dataPreProcess.html",
+    "href": "dataPreProcess.html",
+    "title": "IS415-GAA Group 6: Data Pre-Processing - Geospatial Analysis of Recycling Bin Distribution in Singapore",
+    "section": "",
+    "text": "pacman::p_load(sf, sp, sfdep, tmap, tidyverse, plotly)"
   },
   {
     "objectID": "dataPreProcess.html#imports-blue-recycling-bins-bluebins-data",
@@ -189,10 +161,38 @@
     "text": "Performs local G* analysis for hot spot detection\n\nwm_idw &lt;- bluebins_hs %&gt;%\n  mutate(nb = st_contiguity(geometry),\n         wts = st_inverse_distance(nb, geometry,\n                                   scale = 1,\n                                   alpha = 1),\n         .before = 1)\n\n! Polygon provided. Using point on surface.\n\n\n\nHCSA &lt;- wm_idw %&gt;% \n  mutate(local_Gi = local_gstar_perm(\n    count, nb, wt, nsim = 99),\n         .before = 1) %&gt;%\n  unnest(local_Gi)"
   },
   {
-    "objectID": "userGuide.html",
-    "href": "userGuide.html",
-    "title": "IS415-GAA Group 6: User Guide - Geospatial Analysis of Recycling Bin Distribution in Singapore",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "User Guide\nRecycleSG Shiny App User Guide: You can access the Shiny application here.\n\n\nNavigation\nThe navigation bar will be located at the top of the page. The navigation bar will contain the following tabs: Home, Exploratory Data Analysis, First-order Spatial Point Pattern Analysis, Hot Spot and Cold Spot Area Analysis. Select tab will be highlighted in black.\n\nFor first-order spatial point pattern analysis & hot spot and cold spot area analysis, you can navigate to the respective subtabs under the main tab.\n \n\n\nHome\nThe section provides a summary of the project’s motivation and outlines the various types of geospatial analytic techniques employed in our Shiny App.\n\n\nExploratory Data Analysis\nThe Exploratory Data Analysis page features an interactive map showcasing the distribution of recycling bins across Singapore. Users can filter the data by the type of recycling bin (Blue Bin, E-Waste Bin, Incentive Bin and All) and visualize it alongside Singapore’s population density. Additionally, users have the option to switch between different map display types such as CartoDB, OpenStreetMap, and Esri.\n\nCurrently, there is no map available that allows the display of the different types of recycling bins in Singapore. However, the application enables users to visualize the distribution of Blue Bins, E-Waste Bins, and Incentive Bins across various locations in Singapore. Enhancing valuable insights into the accessibility and availability of different types of recycling facilities within the city-state.\n\n\nFirst-order Spatial Point Pattern Analysis\n\n\nHot Spot and Cold Spot Area Analysis\nThe Hot Spot and Cold Spot Area Analysis page comprises three subtabs: Introduction, Local Indicators of Spatial Association (LISA) Analysis, and Visualisation of Hot Spot and Cold Spot Areas.\n\nIntroductionLISAHCSA\n\n\nThe introduction subtab offers a concise overview of hotspot and coldspot analysis for recycling bin placement in Singapore. It delves into exploring the clustering of bins and pinpointing areas with abundant bin placement, as well as those with minimal to no presence. By highlighting the potential benefits derived from employing this analytics technique, we can gain valuable insights to optimize waste management strategies effectively\n\n\n\nThe LISA (Local Indicators of Spatial Association) subtab in this user guide serves as a pivotal resource for understanding and interpreting the LISA map effectively. By offering a detailed explanation of LISA map interpretation, users gain insights into the spatial patterns and relationships regarding recycling bin placement across Singapore. This section not only elucidates the theoretical underpinnings of LISA analysis but also provides practical guidance on its application in real-world scenarios.\n\nMoreover, the LISA subtab enhances user interaction and customization through an intuitive interactive map interface. This feature empowers users to tailor their exploration experience by adjusting various parameters, including the type of recycling bin, significance level, and map type, to align with their specific requirements and objectives. Additionally, users can select different categories for generating the map, such as mean, median, and pysal, allowing for nuanced analysis and comparison.\n\n\nThe HCSA (Hotspot and Coldspot Analysis) subtab within this user guide offers a comprehensive understanding of interpreting the HCSA map. By delving into the nuances of hotspot and coldspot analysis, users gain insights into identifying areas of high and low activity regarding recycling bin placement in Singapore. This section not only elucidates the significance of these analytical techniques but also provides practical guidance on how to leverage the information gleaned from the HCSA map effectively.\n Furthermore, the HCSA subtab enhances user engagement by offering an interactive map interface. This feature empowers users to personalize their exploration experience by adjusting parameters such as the type of recycling bin, significance level, and map type. Whether users seek to analyze specific categories of recycling bins or explore different levels of significance, this interactive map caters to their diverse needs and preferences."
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Data/prep/MPSZ-2019.html",
+    "href": "Data/prep/MPSZ-2019.html",
+    "title": "IS415-GAA-JinYuan&WanShen",
+    "section": "",
+    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n        0 0     false"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "IS415-GAA JinYuan & WanShen",
+    "section": "",
+    "text": "Our project focuses on leveraging geospatial analytics to optimize recycling bin placement and management in Singapore urban areas. By analysing spatial data, we aim to identify optimal locations for recycling bins, improve waste management efficiency, and promote sustainability. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University."
+  },
+  {
+    "objectID": "index.html#about-us",
+    "href": "index.html#about-us",
+    "title": "IS415-GAA JinYuan & WanShen",
+    "section": "",
+    "text": "Our project focuses on leveraging geospatial analytics to optimize recycling bin placement and management in Singapore urban areas. By analysing spatial data, we aim to identify optimal locations for recycling bins, improve waste management efficiency, and promote sustainability. Our project is a collaboration between Jin Yuan and Wan Shen, two students from the IS415 Geospatial Analytics course at Singapore Management University."
+  },
+  {
+    "objectID": "RecycleSGShiny/testdata/MPSZ-2019.html",
+    "href": "RecycleSGShiny/testdata/MPSZ-2019.html",
+    "title": "IS415-GAA-JinYuan&WanShen",
+    "section": "",
+    "text": "&lt;!DOCTYPE qgis PUBLIC ‘http://mrcc.com/qgis.dtd’ ‘SYSTEM’&gt;     dataset\n\n\n        0 0     false"
   }
 ]
