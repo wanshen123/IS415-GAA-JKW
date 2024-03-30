@@ -353,6 +353,7 @@ server <- function(input, output, session) {
   })
   
   output$kdePlot <- renderTmap({
+    library(maptools)
     # Convert binlocation to spatial objects
     bin_sf <- as_Spatial(binlocation)
     bin_sp <- as(bin_sf, "SpatialPoints")
