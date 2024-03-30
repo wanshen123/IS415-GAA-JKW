@@ -135,6 +135,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Data Pre-Processing</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="./userGuide.html"> 
+<span class="menu-text">User-Guide</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="https://recyclewatch.shinyapps.io/recyclesgshiny/"> 
 <span class="menu-text">Shiny App</span></a>
   </li>  
@@ -150,7 +154,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#package-loading-loads-necessary-packages-including-spatial-analysis-libraries" id="toc-package-loading-loads-necessary-packages-including-spatial-analysis-libraries" class="nav-link active" data-scroll-target="#package-loading-loads-necessary-packages-including-spatial-analysis-libraries">Package Loading: Loads necessary packages including spatial analysis libraries</a></li>
+  <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import">Data Import</a>
+  <ul class="collapse">
+  <li><a href="#imports-blue-recycling-bins-bluebins-data" id="toc-imports-blue-recycling-bins-bluebins-data" class="nav-link" data-scroll-target="#imports-blue-recycling-bins-bluebins-data">Imports blue recycling bins <code>bluebins</code> data</a></li>
+  <li><a href="#imports-master-plan-subzone-mpsz-data" id="toc-imports-master-plan-subzone-mpsz-data" class="nav-link" data-scroll-target="#imports-master-plan-subzone-mpsz-data">Imports master plan subzone <code>mpsz</code> data</a></li>
+  <li><a href="#imports-e-waste-recycling-bins-ewbins-data" id="toc-imports-e-waste-recycling-bins-ewbins-data" class="nav-link" data-scroll-target="#imports-e-waste-recycling-bins-ewbins-data">Imports E-waste recycling bins <code>ewbins</code> data</a></li>
+  <li><a href="#imports-incentives-recycling-bins-rvm-inbins-data" id="toc-imports-incentives-recycling-bins-rvm-inbins-data" class="nav-link" data-scroll-target="#imports-incentives-recycling-bins-rvm-inbins-data">Imports incentives recycling bins (RVM) <code>inbins</code> data</a></li>
+  </ul></li>
+  <li><a href="#population-data-manipulation" id="toc-population-data-manipulation" class="nav-link" data-scroll-target="#population-data-manipulation">Population Data Manipulation</a>
+  <ul class="collapse">
+  <li><a href="#reads-population-data-and-aggregates-it-based-on-planning-area-pa-and-subzone-sz-with-age-groups." id="toc-reads-population-data-and-aggregates-it-based-on-planning-area-pa-and-subzone-sz-with-age-groups." class="nav-link" data-scroll-target="#reads-population-data-and-aggregates-it-based-on-planning-area-pa-and-subzone-sz-with-age-groups.">Reads population data and aggregates it based on Planning Area (PA) and Subzone (SZ) with age groups.</a></li>
+  <li><a href="#converts-pa-and-sz-to-uppercase-for-consistency" id="toc-converts-pa-and-sz-to-uppercase-for-consistency" class="nav-link" data-scroll-target="#converts-pa-and-sz-to-uppercase-for-consistency">Converts PA and SZ to uppercase for consistency</a></li>
+  <li><a href="#joins-population-data-with-master-plan-subzone-data" id="toc-joins-population-data-with-master-plan-subzone-data" class="nav-link" data-scroll-target="#joins-population-data-with-master-plan-subzone-data">Joins population data with master plan subzone data</a></li>
+  <li><a href="#checks-for-and-fixes-invalid-geometries-in-the-population-data" id="toc-checks-for-and-fixes-invalid-geometries-in-the-population-data" class="nav-link" data-scroll-target="#checks-for-and-fixes-invalid-geometries-in-the-population-data">Checks for and fixes invalid geometries in the population data</a></li>
+  </ul></li>
+  <li><a href="#coordinate-transformation" id="toc-coordinate-transformation" class="nav-link" data-scroll-target="#coordinate-transformation">Coordinate Transformation</a>
+  <ul class="collapse">
+  <li><a href="#transforms-spatial-data-to-a-specific-coordinate-reference-system-crs-using-epsg3414." id="toc-transforms-spatial-data-to-a-specific-coordinate-reference-system-crs-using-epsg3414." class="nav-link" data-scroll-target="#transforms-spatial-data-to-a-specific-coordinate-reference-system-crs-using-epsg3414.">Transforms spatial data to a specific coordinate reference system (CRS) using EPSG:3414.</a></li>
+  </ul></li>
+  <li><a href="#geocoding" id="toc-geocoding" class="nav-link" data-scroll-target="#geocoding">Geocoding</a></li>
+  <li><a href="#cleaning-up-unnecessary-columns-and-tidying-the-data" id="toc-cleaning-up-unnecessary-columns-and-tidying-the-data" class="nav-link" data-scroll-target="#cleaning-up-unnecessary-columns-and-tidying-the-data">Cleaning up unnecessary columns and tidying the data</a></li>
+  <li><a href="#hsca-data-analysis-preparation" id="toc-hsca-data-analysis-preparation" class="nav-link" data-scroll-target="#hsca-data-analysis-preparation">HSCA Data Analysis Preparation</a>
+  <ul class="collapse">
+  <li><a href="#add-new-column-type-to-the-3-bins-data" id="toc-add-new-column-type-to-the-3-bins-data" class="nav-link" data-scroll-target="#add-new-column-type-to-the-3-bins-data">Add new column TYPE to the 3 bins data</a></li>
+  <li><a href="#computes-spatial-weights-for-spatial-autocorrelation-analysis-using-contiguity-and-inverse-distance" id="toc-computes-spatial-weights-for-spatial-autocorrelation-analysis-using-contiguity-and-inverse-distance" class="nav-link" data-scroll-target="#computes-spatial-weights-for-spatial-autocorrelation-analysis-using-contiguity-and-inverse-distance">Computes spatial weights for spatial autocorrelation analysis using contiguity and inverse distance</a></li>
+  <li><a href="#conducts-global-morans-i-test-and-local-indicators-of-spatial-association-lisa-analysis-for-spatial-autocorrelation" id="toc-conducts-global-morans-i-test-and-local-indicators-of-spatial-association-lisa-analysis-for-spatial-autocorrelation" class="nav-link" data-scroll-target="#conducts-global-morans-i-test-and-local-indicators-of-spatial-association-lisa-analysis-for-spatial-autocorrelation">Conducts global Moran’s I test and Local Indicators of Spatial Association (LISA) analysis for spatial autocorrelation</a></li>
+  <li><a href="#performs-local-g-analysis-for-hot-spot-detection" id="toc-performs-local-g-analysis-for-hot-spot-detection" class="nav-link" data-scroll-target="#performs-local-g-analysis-for-hot-spot-detection">Performs local G* analysis for hot spot detection</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -180,9 +217,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="package-loading-loads-necessary-packages-including-spatial-analysis-libraries" class="level1">
+<h1>Package Loading: Loads necessary packages including spatial analysis libraries</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, sp, sfdep, tmap, tidyverse, plotly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="data-import" class="level1">
+<h1>Data Import</h1>
+<section id="imports-blue-recycling-bins-bluebins-data" class="level2">
+<h2 class="anchored" data-anchor-id="imports-blue-recycling-bins-bluebins-data">Imports blue recycling bins <code>bluebins</code> data</h2>
 <p><em>Blue Bin</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bluebins <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"Data/gov"</span>, </span>
@@ -196,6 +240,9 @@ Bounding box:  xmin: 11519.15 ymin: 28097.64 xmax: 45292.59 ymax: 48741.06
 Projected CRS: SVY21</code></pre>
 </div>
 </div>
+</section>
+<section id="imports-master-plan-subzone-mpsz-data" class="level2">
+<h2 class="anchored" data-anchor-id="imports-master-plan-subzone-mpsz-data">Imports master plan subzone <code>mpsz</code> data</h2>
 <p><em>Master Plan Subzone</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"Data/prep"</span>, </span>
@@ -209,15 +256,27 @@ Bounding box:  xmin: 103.6057 ymin: 1.158699 xmax: 104.0885 ymax: 1.470775
 Geodetic CRS:  WGS 84</code></pre>
 </div>
 </div>
+</section>
+<section id="imports-e-waste-recycling-bins-ewbins-data" class="level2">
+<h2 class="anchored" data-anchor-id="imports-e-waste-recycling-bins-ewbins-data">Imports E-waste recycling bins <code>ewbins</code> data</h2>
 <p><em>E-Waste Bin</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ewbins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/prep/EWbins.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="imports-incentives-recycling-bins-rvm-inbins-data" class="level2">
+<h2 class="anchored" data-anchor-id="imports-incentives-recycling-bins-rvm-inbins-data">Imports incentives recycling bins (RVM) <code>inbins</code> data</h2>
 <p><em>Incentive Bin</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>inbins <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/prep/RVMbins.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+</section>
+<section id="population-data-manipulation" class="level1">
+<h1>Population Data Manipulation</h1>
 <p><em>SG Population</em></p>
+<section id="reads-population-data-and-aggregates-it-based-on-planning-area-pa-and-subzone-sz-with-age-groups." class="level2">
+<h2 class="anchored" data-anchor-id="reads-population-data-and-aggregates-it-based-on-planning-area-pa-and-subzone-sz-with-age-groups.">Reads population data and aggregates it based on Planning Area (PA) and Subzone (SZ) with age groups.</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/singstat/PopulationSG_2023.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -230,8 +289,6 @@ dbl (2): Pop, Time
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-</div>
-<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>popdata <span class="ot">&lt;-</span> pop <span class="sc">%&gt;%</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PA, SZ, AG) <span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">`</span><span class="at">POP</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Pop</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
@@ -246,27 +303,47 @@ dbl (2): Pop, Time
 `.groups` argument.</code></pre>
 </div>
 </div>
+</section>
+<section id="converts-pa-and-sz-to-uppercase-for-consistency" class="level2">
+<h2 class="anchored" data-anchor-id="converts-pa-and-sz-to-uppercase-for-consistency">Converts PA and SZ to uppercase for consistency</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>popdata <span class="ot">&lt;-</span> popdata <span class="sc">%&gt;%</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="at">.vars =</span> <span class="fu">vars</span>(PA, SZ), </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">.funs =</span> <span class="fu">list</span>(toupper))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="joins-population-data-with-master-plan-subzone-data" class="level2">
+<h2 class="anchored" data-anchor-id="joins-population-data-with-master-plan-subzone-data">Joins population data with master plan subzone data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">left_join</span>(mpsz, popdata,</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"SUBZONE_N"</span> <span class="ot">=</span> <span class="st">"SZ"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="checks-for-and-fixes-invalid-geometries-in-the-population-data" class="level2">
+<h2 class="anchored" data-anchor-id="checks-for-and-fixes-invalid-geometries-in-the-population-data">Checks for and fixes invalid geometries in the population data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for invalid geometries</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>invalid_geoms <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">st_is_valid</span>(pop)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix invalid geometries</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>pop[invalid_geoms, ] <span class="ot">&lt;-</span> <span class="fu">st_make_valid</span>(pop[invalid_geoms, ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+</section>
+<section id="coordinate-transformation" class="level1">
+<h1>Coordinate Transformation</h1>
+<section id="transforms-spatial-data-to-a-specific-coordinate-reference-system-crs-using-epsg3414." class="level2">
+<h2 class="anchored" data-anchor-id="transforms-spatial-data-to-a-specific-coordinate-reference-system-crs-using-epsg3414.">Transforms spatial data to a specific coordinate reference system (CRS) using EPSG:3414.</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(pop, <span class="dv">3414</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>bluebins <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(bluebins, <span class="dv">3414</span>)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>ewbins <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(ewbins, <span class="dv">3414</span>)</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>inbins <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(inbins, <span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+</section>
+<section id="geocoding" class="level1">
+<h1>Geocoding</h1>
+<p><strong>Geocodes postal codes to obtain latitude and longitude coordinates using OpenStreetMap Nominatim API.</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to geocode using OpenStreetMap Nominatim API</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>geocode_osm <span class="ot">&lt;-</span> <span class="cf">function</span>(postal_codes) {</span>
@@ -292,6 +369,8 @@ dbl (2): Pop, Time
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Bind latitude and longitude data back to the original data frame</span></span>
 <span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>ewbins <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ewbins, geo_data_osm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><strong>Manually assigns latitude and longitude for specific postal codes if missing</strong></p>
+<p>Input missing postal code for <code>ewbins</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify rows with missing lat or lon</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>missing_coords <span class="ot">&lt;-</span> ewbins[<span class="fu">is.na</span>(ewbins<span class="sc">$</span>lat) <span class="sc">|</span> <span class="fu">is.na</span>(ewbins<span class="sc">$</span>lon), <span class="fu">c</span>(<span class="st">"Postal Code"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>)]</span>
@@ -332,6 +411,7 @@ dbl (2): Pop, Time
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform coordinates to SVY21 (EPSG:3414)</span></span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>ewbins <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(coordinates, <span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><strong>Convert postal code to obtain latitude and longitude coordinates and input missing postal code for <code>inbins</code></strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract postal codes from the CSV data</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>postal_codes <span class="ot">&lt;-</span> inbins<span class="sc">$</span><span class="st">`</span><span class="at">Postal Code</span><span class="st">`</span></span>
@@ -375,6 +455,9 @@ dbl (2): Pop, Time
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform coordinates to SVY21 (EPSG:3414)</span></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>inbins <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(coordinates, <span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="cleaning-up-unnecessary-columns-and-tidying-the-data" class="level1">
+<h1>Cleaning up unnecessary columns and tidying the data</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>subzone_matched <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(bluebins, pop)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>subzone_matched <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(subzone_matched)</span>
@@ -386,6 +469,9 @@ dbl (2): Pop, Time
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>joined_data_clean <span class="ot">&lt;-</span> joined_data[<span class="fu">complete.cases</span>(joined_data<span class="sc">$</span>ADDRESSSTR), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="hsca-data-analysis-preparation" class="level1">
+<h1>HSCA Data Analysis Preparation</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>grouped_data <span class="ot">&lt;-</span> joined_data_clean <span class="sc">%&gt;%</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SUBZONE_N, REGION_N) <span class="sc">%&gt;%</span></span>
@@ -401,6 +487,8 @@ dbl (2): Pop, Time
 <span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>grouped_data <span class="ot">&lt;-</span> grouped_data <span class="sc">%&gt;%</span></span>
 <span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">count =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(count), <span class="dv">0</span>, count))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<section id="add-new-column-type-to-the-3-bins-data" class="level2">
+<h2 class="anchored" data-anchor-id="add-new-column-type-to-the-3-bins-data">Add new column TYPE to the 3 bins data</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>grouped_data <span class="ot">&lt;-</span> grouped_data <span class="sc">%&gt;%</span> </span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TYPE =</span> <span class="st">"BLUEBIN"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -410,6 +498,9 @@ dbl (2): Pop, Time
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ewbins_hs <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"Data/prep/ewbins_dist.rds"</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>inbins_hs <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"Data/prep/inbins_dist.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="computes-spatial-weights-for-spatial-autocorrelation-analysis-using-contiguity-and-inverse-distance" class="level2">
+<h2 class="anchored" data-anchor-id="computes-spatial-weights-for-spatial-autocorrelation-analysis-using-contiguity-and-inverse-distance">Computes spatial weights for spatial autocorrelation analysis using contiguity and inverse distance</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>wm_q <span class="ot">&lt;-</span> bluebins_hs <span class="sc">%&gt;%</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">nb =</span> <span class="fu">st_contiguity</span>(geometry, <span class="at">queen =</span> <span class="cn">TRUE</span>),</span>
@@ -490,6 +581,9 @@ statistic = 0.2836, observed rank = 1000, p-value &lt; 2.2e-16
 alternative hypothesis: two.sided</code></pre>
 </div>
 </div>
+</section>
+<section id="conducts-global-morans-i-test-and-local-indicators-of-spatial-association-lisa-analysis-for-spatial-autocorrelation" class="level2">
+<h2 class="anchored" data-anchor-id="conducts-global-morans-i-test-and-local-indicators-of-spatial-association-lisa-analysis-for-spatial-autocorrelation">Conducts global Moran’s I test and Local Indicators of Spatial Association (LISA) analysis for spatial autocorrelation</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>lisa <span class="ot">&lt;-</span> wm_q <span class="sc">%&gt;%</span> </span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">local_moran =</span> <span class="fu">local_moran</span>(</span>
@@ -497,6 +591,9 @@ alternative hypothesis: two.sided</code></pre>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">.before =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(local_moran)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="performs-local-g-analysis-for-hot-spot-detection" class="level2">
+<h2 class="anchored" data-anchor-id="performs-local-g-analysis-for-hot-spot-detection">Performs local G* analysis for hot spot detection</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>wm_idw <span class="ot">&lt;-</span> bluebins_hs <span class="sc">%&gt;%</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">nb =</span> <span class="fu">st_contiguity</span>(geometry),</span>
@@ -517,6 +614,8 @@ alternative hypothesis: two.sided</code></pre>
 </div>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

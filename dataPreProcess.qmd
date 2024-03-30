@@ -5,9 +5,15 @@ date-format: "DD/MM/YYYY"
 editor: visual
 ---
 
+# Package Loading: Loads necessary packages including spatial analysis libraries
+
 ```{r}
 pacman::p_load(sf, sp, sfdep, tmap, tidyverse, plotly)
 ```
+
+# Data Import
+
+## Imports blue recycling bins `bluebins` data
 
 *Blue Bin*
 
@@ -16,12 +22,16 @@ bluebins <- st_read(dsn = "Data/gov",
                  layer = "RECYCLINGBINS")
 ```
 
+## Imports master plan subzone `mpsz` data
+
 *Master Plan Subzone*
 
 ```{r}
 mpsz <- st_read(dsn = "Data/prep", 
                  layer = "MPSZ-2019")
 ```
+
+## Imports E-waste recycling bins `ewbins` data
 
 *E-Waste Bin*
 
@@ -33,6 +43,8 @@ ewbins <- read_csv("Data/prep/EWbins.csv")
 ewbins <- read_rds("Data/prep/ewbins.rds")
 ```
 
+## Imports incentives recycling bins (RVM) `inbins` data
+
 *Incentive Bin*
 
 ```{r eval=FALSE}
@@ -43,13 +55,15 @@ inbins <- read_csv("Data/prep/RVMbins.csv")
 inbins <- read_rds("Data/prep/inbins.rds")
 ```
 
+
+# Population Data Manipulation
+
 *SG Population*
+
+## Reads population data and aggregates it based on Planning Area (PA) and Subzone (SZ) with age groups.
 
 ```{r}
 pop <- read_csv("Data/singstat/PopulationSG_2023.csv")
-```
-
-```{r}
 popdata <- pop %>%
   group_by(PA, SZ, AG) %>%
   summarise(`POP` = sum(`Pop`)) %>%
@@ -61,16 +75,22 @@ mutate(`TOTAL`=rowSums(.[3:21])) %>%
        `TOTAL`)
 ```
 
+## Converts PA and SZ to uppercase for consistency
+
 ```{r}
 popdata <- popdata %>%
   mutate_at(.vars = vars(PA, SZ), 
           .funs = list(toupper))
 ```
 
+## Joins population data with master plan subzone data
+
 ```{r}
 pop <- left_join(mpsz, popdata,
                           by = c("SUBZONE_N" = "SZ"))
 ```
+
+## Checks for and fixes invalid geometries in the population data
 
 ```{r}
 # Check for invalid geometries
@@ -79,6 +99,10 @@ invalid_geoms <- !st_is_valid(pop)
 pop[invalid_geoms, ] <- st_make_valid(pop[invalid_geoms, ])
 ```
 
+# Coordinate Transformation
+
+## Transforms spatial data to a specific coordinate reference system (CRS) using EPSG:3414.
+
 ```{r}
 pop <- st_transform(pop, 3414)
 bluebins <- st_transform(bluebins, 3414)
@@ -86,7 +110,11 @@ ewbins <- st_transform(ewbins, 3414)
 inbins <- st_transform(inbins, 3414)
 ```
 
+# Geocoding
 
+**Geocodes postal codes to obtain latitude and longitude coordinates using OpenStreetMap Nominatim API.**
+
+```{r eval=FALSE}
 ```{r eval=FALSE}
 # Function to geocode using OpenStreetMap Nominatim API
 geocode_osm <- function(postal_codes) {
@@ -113,6 +141,9 @@ geo_data_osm <- geocode_osm(postal_codes)
 ewbins <- cbind(ewbins, geo_data_osm)
 ```
 
+**Manually assigns latitude and longitude for specific postal codes if missing**
+
+Input missing postal code for `ewbins`    
 ```{r eval=FALSE}
 # Identify rows with missing lat or lon
 missing_coords <- ewbins[is.na(ewbins$lat) | is.na(ewbins$lon), c("Postal Code", "lat", "lon")]
@@ -156,6 +187,8 @@ coordinates <- st_as_sf(ewbins, coords = c("lon", "lat"), crs = 4326)
 # Transform coordinates to SVY21 (EPSG:3414)
 ewbins <- st_transform(coordinates, 3414)
 ```
+
+**Convert postal code to obtain latitude and longitude coordinates and input missing postal code for `inbins`**
 
 ```{r eval=FALSE}
 # Extract postal codes from the CSV data
@@ -203,6 +236,8 @@ coordinates <- st_as_sf(inbins, coords = c("lon", "lat"), crs = 4326)
 inbins <- st_transform(coordinates, 3414)
 ```
 
+# Cleaning up unnecessary columns and tidying the data
+
 ```{r eval=FALSE}
 subzone_matched <- st_intersection(bluebins, pop)
 subzone_matched <- st_drop_geometry(subzone_matched)
@@ -216,6 +251,9 @@ joined_data_clean <- na.omit(joined_data)
 ```{r eval=FALSE}
 joined_data_clean <- joined_data[complete.cases(joined_data$ADDRESSSTR), ]
 ```
+
+
+# HSCA Data Analysis Preparation
 
 ```{r eval=FALSE}
 grouped_data <- joined_data_clean %>%
@@ -233,6 +271,7 @@ grouped_data <- grouped_data %>%
   mutate(count = ifelse(is.na(count), 0, count))
 ```
 
+## Add new column TYPE to the 3 bins data
 ```{r eval=FALSE}
 grouped_data <- grouped_data %>% 
   mutate(TYPE = "BLUEBIN")
@@ -244,7 +283,7 @@ ewbins_hs <- read_rds("Data/prep/ewbins_dist.rds")
 inbins_hs <- read_rds("Data/prep/inbins_dist.rds")
 ```
 
-
+## Computes spatial weights for spatial autocorrelation analysis using contiguity and inverse distance
 ```{r}
 wm_q <- bluebins_hs %>%
   mutate(nb = st_contiguity(geometry, queen = TRUE),
@@ -264,6 +303,7 @@ global_moran_perm(wm_q$count,
                   nsim = 999)
 ```
 
+## Conducts global Moran's I test and Local Indicators of Spatial Association (LISA) analysis for spatial autocorrelation
 ```{r}
 lisa <- wm_q %>% 
   mutate(local_moran = local_moran(
@@ -272,7 +312,7 @@ lisa <- wm_q %>%
   unnest(local_moran)
 ```
 
-
+## Performs local G* analysis for hot spot detection
 ```{r}
 wm_idw <- bluebins_hs %>%
   mutate(nb = st_contiguity(geometry),
@@ -289,5 +329,3 @@ HCSA <- wm_idw %>%
          .before = 1) %>%
   unnest(local_Gi)
 ```
-
-

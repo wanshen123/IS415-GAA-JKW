@@ -11,6 +11,8 @@ website:
         text: Proposal
       - href: dataPreProcess.qmd
         text: Data Pre-Processing
+      - href: userGuide.qmd
+        text: User-Guide
       - href: https://recyclewatch.shinyapps.io/recyclesgshiny/
         text: Shiny App
 
