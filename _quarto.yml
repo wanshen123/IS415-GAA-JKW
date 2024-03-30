@@ -13,6 +13,8 @@ website:
         text: Data Pre-Processing
       - href: userGuide.qmd
         text: User-Guide
+      - href: poster.qmd
+        text: Poster
       - href: https://recyclewatch.shinyapps.io/recyclesgshiny/
         text: Shiny App
 

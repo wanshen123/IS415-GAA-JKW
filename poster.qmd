@@ -1,0 +1,8 @@
+---
+title: "IS415-GAA Group 6: Poster"
+date: 03/25/2024
+date-format: "DD/MM/YYYY"
+editor: visual
+---
+
+![](image/IS415_Team06_Poster.jpg){fig-align="center"}
